@@ -1,0 +1,33 @@
+WebDev-Project1:
+- Description of the game:
+	An online othello game which enables multiple players to enter different ROOMs to play with others or observe others playing on site.
+
+- What Player will see:
+	- index page contains:
+		- An text input. For users to enter the room number they want to enter to play or observe.
+		- A list form. Listing out all rooms which are currently existed.
+		- A Join button. Clicking it to enter the room specified by the room number typed in the text input as a player.
+		- An Obsererve button. Clicking it to enter a room as an observer.
+		- A New button. Clicking it to create a new room, whose room number is assigned by server.
+	- Room page contains:
+		- A game board of Othello.(left)
+		- A game info column, which contains:
+			- current score for player 1.
+			- current score for player 2.
+			- current player who needs to make its next move.
+		- An Exit button. Exiting the room and back to index page.
+
+- What action users can make:
+	- On index page, all users can:
+		- Type in a room number in the text input.
+		- Click Join button to enter a room specified by an availble room number listed below as a player.  
+		- Click Obaserve button to enter the room and observe other playing.
+	- On Room page, Players can:
+		- Click on Othello game board to make their next move if its their turn.
+		- Click Exit button to leave the room and back to index page.
+
+		...	Observer can:
+		- Click Exit button to leave the room and back to index page.
+
+
+- 
