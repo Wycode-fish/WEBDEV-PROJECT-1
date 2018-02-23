@@ -7,7 +7,7 @@ WebDev-Project1:
 		- An text input. For users to enter the room number they want to enter to play or observe.
 		- A list form. Listing out all rooms which are currently existed.
 		- A Join button. Clicking it to enter the room specified by the room number typed in the text input as a player.
-		- An Obsererve button. Clicking it to enter a room as an observer.
+		- An Observe button. Clicking it to enter a room as an observer.
 		- A New button. Clicking it to create a new room, whose room number is assigned by server.
 	- Room page contains:
 		- A game board of Othello.(left)
@@ -20,8 +20,8 @@ WebDev-Project1:
 - What action users can make:
 	- On index page, all users can:
 		- Type in a room number in the text input.
-		- Click Join button to enter a room specified by an availble room number listed below as a player.  
-		- Click Obaserve button to enter the room and observe other playing.
+		- Click Join button to enter a room specified by an available room number listed below as a player.
+		- Click Observe button to enter the room and observe other playing.
 	- On Room page, Players can:
 		- Click on Othello game board to make their next move if its their turn.
 		- Click Exit button to leave the room and back to index page.
@@ -29,5 +29,23 @@ WebDev-Project1:
 		...	Observer can:
 		- Click Exit button to leave the room and back to index page.
 
+- Describe how a player can win:
+Attribution: https://en.wikipedia.org/wiki/Reversi#End-game
 
-- 
+	- Rule:
+		- The board is 8 x 8. When game starts, two pieces with white side up, two pieces with the black side up,
+	    with same-colored disks on a diagonal with each other.
+		- Players take alternate turns. The black piece moves first. And black must place a piece in a position that:
+		  there exists at least one straight (horizontal, vertical, or diagonal) occupied line between the new piece and another dark piece,
+			with one or more contiguous light pieces between them.
+		- Then white moves, and the follow the similar rule for black.
+
+	- Game End:
+		If both players can not make a valid move, the game ends.
+		It may happens when the grid are fully filled or both players can not legally place a piece in any of the remaining squares
+
+  - Who Win:
+		When the game ends, the player has more pieces on the board is the winner.
+
+
+-
