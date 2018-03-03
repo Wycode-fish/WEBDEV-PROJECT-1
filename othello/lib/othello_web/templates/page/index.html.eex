@@ -1,36 +1,26 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
-</div>
-
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
+<div class="row">
+  <div class="col-lg-12">
+    <h1>Welcome to Draw Something</h1>
   </div>
 
   <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
+    <p>Enter your name and the name of a game to join a game.</p>
+    <p>To create a new game, pick an unused name and share it with the other players.</p>
+  </div>
+
+  <div class="col-lg-6">
+    <h2>Join a Game</h2>
+
+    <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
+    <div class="form-group">
+      <%= label(f, :user, "Your Name") %>
+      <%= text_input(f, :user, class: "form-control") %>
+    </div>
+    <div class="form-group">
+      <%= label(f, :game, "Game Name") %>
+      <%= text_input(f, :game, class: "form-control") %>
+    </div>
+    <%= submit "Join", class: "btn btn-primary" %>
+    <% end %>
   </div>
 </div>

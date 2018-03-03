@@ -9,17 +9,18 @@
 
     <title>Hello Othello!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script>window.userToken = "<%= assigns[:user_token] %>";</script>
   </head>
 
-  <body>
+  <body data-page="<%= page_name(@view_module, @view_template) %>">
     <div class="container">
-      <header class="header">
+      <header>
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <li><a href="/">Go Back</a></li>
           </ul>
         </nav>
-        <span class="logo"></span>
+        <div class="clearfix"></div>
       </header>
 
       <%= if get_flash(@conn, :info) do %>
@@ -29,12 +30,8 @@
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <% end %>
 
-      
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+      <%= render @view_module, @view_template, assigns %>
 
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

@@ -40,6 +40,7 @@ defmodule OthelloWeb do
       import OthelloWeb.Router.Helpers
       import OthelloWeb.ErrorHelpers
       import OthelloWeb.Gettext
+      import OthelloWeb.Helpers
     end
   end
 

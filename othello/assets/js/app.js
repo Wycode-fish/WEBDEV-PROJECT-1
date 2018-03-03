@@ -19,3 +19,29 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import "./play"
+// import play_init from "./play";
+//
+// function start() {
+//   let root = document.getElementById('root');
+//   play_init(root);
+// }
+//
+// // function start() {
+// //   let root = document.getElementById('root');
+// //   if (root) {
+// //     let channel = socket.channel("games:" + window.gameName, {});
+// //     /*
+// //     channel.join()
+// //            .receive("ok", resp => { console.log("Joined successfully", resp) })
+// //            .receive("error", resp => { console.log("Unable to join", resp) });
+// // 	*/
+// //     init(root, channel);
+// //   }
+// //
+// //   if (document.getElementById('index-page')) {
+// //     form_init();
+// //   }
+// // }
+//
+// $(start);
