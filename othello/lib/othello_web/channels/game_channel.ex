@@ -18,8 +18,25 @@ defmodule OthelloWeb.GameChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-
-
+  def handle_in("chess", %{"state" => state}, socket) do
+    gname = socket.assigns[:name]
+    user  = socket.assigns[:user]
+    game =  %{ name: gname, host: user, state: state }
+    IO.puts("&&&&&&")
+    IO.inspect(game)
+    Game.put(gname, game)
+    cond do
+      is_nil(user) ->
+        IO.inspect {"invalid user", socket.assigns[:user]}
+        {:reply, {:ok, %{}}, socket}
+      is_nil(game) ->
+        IO.inspect {"invalid game", socket.assigns[:name]}
+        {:reply, {:ok, %{}}, socket}
+      true ->
+        broadcast socket, "chess", state
+        {:reply, {:ok, %{}}, socket}
+    end
+  end
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

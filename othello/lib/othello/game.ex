@@ -18,26 +18,6 @@ defmodule Othello.Game do
     Agent.get(__MODULE__, &Map.get(&1, gname))
   end
 
-
-  # def join(gname, user) do
-  #   game = get(gname)
-  #
-  #   if game do
-  #     game
-  #   else
-  #     game = %{ name: gname, host: user, word: next_word() }
-  #     put(gname, game)
-  #   end
-  # end
-  #
-  # def next_word do
-  #   words = ~w(
-  #     dog cat horse frog snake
-  #     muffin cookie pizza sandwich
-  #     house car train clock
-  #   )
-  #   Enum.random(words)
-  # end
   def join(gname, user) do
     game = get(gname)
 
@@ -51,6 +31,7 @@ defmodule Othello.Game do
 
   def init_state do
       %{
+        availables: [ [5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3] ],
         tiles: [0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
@@ -59,9 +40,9 @@ defmodule Othello.Game do
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0],
-        current: "black",
-        blackScore: 0,
-        whiteScore: 0
+        current: 1,
+        blackScore: 2,
+        whiteScore: 2
       }
 
   end
