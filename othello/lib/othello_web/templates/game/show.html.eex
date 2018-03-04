@@ -3,11 +3,6 @@
    user: "<%= escape_javascript @user %>",
    game: "<%= escape_javascript @game %>",
    host: <%= @host %>,
-   <%= if @host do %>
-    word: "<%= escape_javascript @word %>",
-   <% else %>
-    word: "",
-   <% end %>
  };
 </script>
 <div class="row">

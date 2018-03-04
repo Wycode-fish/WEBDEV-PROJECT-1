@@ -12,7 +12,7 @@ defmodule OthelloWeb.GameController do
     if !is_nil(user) and !is_nil(game) do
       IO.puts "------------"
       IO.inspect user
-      render conn, "show.html", user: user, host: host, game: gname, word: game[:word]
+      render conn, "show.html", user: user, host: host, game: gname, state: game[:state]
     else
       conn
       |> put_flash(:error, "Bad user or game chosen")
@@ -21,10 +21,9 @@ defmodule OthelloWeb.GameController do
   end
 
   def join(conn, %{"join_data" => join}) do
-
-
     game = Game.join(join["game"], join["user"])
-
+    IO.inspect(game)
+    IO.puts("**************")
     conn
     |> put_session(:user, join["user"])
     |> redirect(to: "/g/" <> join["game"])

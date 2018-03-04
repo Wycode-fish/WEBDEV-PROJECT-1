@@ -13,18 +13,21 @@ export default function run_game(root, channel) {
 class Game extends Component {
   constructor(props) {
     super(props);
-    let initArr = [];
-    for(let i = 0; i < 64; i++) initArr[i] = 0;
     this.channel = props.channel;
     this.state = {
-      tiles: initArr,
-      current: "black",
+      tiles: [],
+      current: "",
       blackScore: 0,
       whiteScore: 0
     }
     this.channel.join()
-         .receive("ok", resp => console.log("Success", resp))
+         .receive("ok", this.gotView.bind(this))
          .receive("error", resp => { console.log("Unable to join", resp) });
+  }
+
+  gotView(view) {
+    console.log("NEW VIEW", view)
+    this.setState(view.game.state)
   }
 
   render() {
@@ -62,7 +65,7 @@ class Game extends Component {
       tiles[index] = 1;
       this.setState({current: "white", blackScore: this.state.blackScore + 1, tiles: tiles})
     } else {
-      tiles[index] = -1;
+      tiles[index] = 2;
       this.setState({current: "black", whiteScore: this.state.whiteScore + 1, tiles: tiles})
     }
   }

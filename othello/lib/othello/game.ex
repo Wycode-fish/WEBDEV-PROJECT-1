@@ -15,33 +15,54 @@ defmodule Othello.Game do
   end
 
   def get(gname) do
-    IO.puts "hahfaowfhoh"
-    IO.inspect gname;
     Agent.get(__MODULE__, &Map.get(&1, gname))
   end
 
-  def join(gname, user) do
-    # IO.puts "aihegihegoeuhgio"
-    # IO.inspect gname;
-    # IO.inspect user;
 
+  # def join(gname, user) do
+  #   game = get(gname)
+  #
+  #   if game do
+  #     game
+  #   else
+  #     game = %{ name: gname, host: user, word: next_word() }
+  #     put(gname, game)
+  #   end
+  # end
+  #
+  # def next_word do
+  #   words = ~w(
+  #     dog cat horse frog snake
+  #     muffin cookie pizza sandwich
+  #     house car train clock
+  #   )
+  #   Enum.random(words)
+  # end
+  def join(gname, user) do
     game = get(gname)
 
-    IO.inspect game;
     if game do
       game
     else
-      game = %{ name: gname, host: user, word: next_word() }
+      game = %{ name: gname, host: user, state: init_state() }
       put(gname, game)
     end
   end
 
-  def next_word do
-    words = ~w(
-      dog cat horse frog snake
-      muffin cookie pizza sandwich
-      house car train clock
-    )
-    Enum.random(words)
+  def init_state do
+      %{
+        tiles: [0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,2,1,0,0,0,
+                0,0,0,1,2,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0],
+        current: "black",
+        blackScore: 0,
+        whiteScore: 0
+      }
+
   end
 end
