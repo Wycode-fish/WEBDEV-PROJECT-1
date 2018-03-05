@@ -12,13 +12,14 @@ let LEFT 		= 8;
 let size = 8;
 
 let curr = [[0,0,0,0,0,0,0,0],
-			[0,1,0,0,0,0,0,0],
-			[0,0,1,0,0,0,0,0],
-			[0,0,0,1,1,0,0,0],
-			[0,0,0,2,2,0,0,0],
-			[0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0]]
+						[0,0,0,0,0,0,0,0],
+						[0,0,0,0,0,0,0,0],
+						[0,0,0,1,1,1,0,0],
+						[0,0,0,2,2,2,0,0],
+						[0,0,0,0,0,0,0,0],
+						[0,0,0,0,0,0,0,0],
+						[0,0,0,0,0,0,0,0]]
+
 
 
 export function hello() {
@@ -206,8 +207,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[0][i-1]==oid) {
     let pos = searchPos(curr, [0,i], LEFT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(0);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -215,8 +216,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[1][i-1]==oid) {
     let pos = searchPos(curr, [0,i], DOWN_LEFT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(0);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -224,8 +225,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[1][i]==oid) {
     let pos = searchPos(curr, [0,i], DOWN);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(0);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -233,8 +234,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[1][i+1]==oid) {
     let pos = searchPos(curr, [0,i], DOWN_RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(0);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -242,8 +243,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[0][i+1]==oid) {
     let pos = searchPos(curr, [0,i], RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(0);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -260,7 +261,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,0], TOP);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(0);
      positions.push(pos);
     }
    }
@@ -269,7 +270,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,0], DOWN);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(0);
      positions.push(pos);
     }
    }
@@ -278,7 +279,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [0,i], TOP_RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(0);
      positions.push(pos);
     }
    }
@@ -287,7 +288,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [0,i], DOWN_RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(0);
      positions.push(pos);
     }
    }
@@ -296,7 +297,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [0,i], RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(0);
      positions.push(pos);
     }
    }
@@ -313,7 +314,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,size-1], TOP);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(size-1);
      positions.push(pos);
     }
    }
@@ -322,7 +323,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,size-1], DOWN);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(size-1);
      positions.push(pos);
     }
    }
@@ -331,7 +332,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,size-1], TOP_LEFT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(size-1);
      positions.push(pos);
     }
    }
@@ -340,7 +341,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,size-1], DOWN_LEFT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(size-1);
      positions.push(pos);
     }
    }
@@ -349,7 +350,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     let pos = searchPos(curr, [i,size-1], LEFT);
     if (curr[pos[0]][pos[1]]==0) {
      pos.push(i);
-     pos.push(j);
+     pos.push(size-1);
      positions.push(pos);
     }
    }
@@ -365,8 +366,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[size-2][i]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(size-1);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -374,8 +375,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[size-1][i-1]==oid) {
     let pos = searchPos(curr, [size-1,i], LEFT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(size-1);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -383,8 +384,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[size-2][i-1]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP_LEFT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(size-1);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -392,8 +393,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[size-2][i+1]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP_RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(size-1);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -401,8 +402,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    if (curr[size-1][i+1]==oid) {
     let pos = searchPos(curr, [size-1,i], RIGHT);
     if (curr[pos[0]][pos[1]]==0) {
+     pos.push(size-1);
      pos.push(i);
-     pos.push(j);
      positions.push(pos);
     }
    }
@@ -509,10 +510,11 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
 
 
 
-
-
-export function nextBoard (curr, nextmove, positions, pid) { // curr: List[List[]], nextmove: tuple(x, y)
-
+export function nextBoard (input, nextmove, positions, pid) { // curr: List[List[]], nextmove: tuple(x, y)
+	let curr = [];
+	for (let i=0; i<input.length; i++) {
+		curr.push(input[i].slice());
+	}
 	for (let i=0; i<positions.length; i++) {
 
 		if (nextmove[0]==positions[i][0] && nextmove[1]==positions[i][1]) {
@@ -536,7 +538,7 @@ export function nextBoard (curr, nextmove, positions, pid) { // curr: List[List[
 				curr[nextmove[0]][nextmove[1]]=pid;
 			}
 			// down left
-			else if (positions[i][2]<nextmove[0] && positions[i][3]>nextmove[1]) {
+			else if (positions[i][2]>nextmove[0] && positions[i][3]<nextmove[1]) {
 				let x = positions[i][2];
 				let y = positions[i][3];
 				while (x!=nextmove[0] && y!=nextmove[1]) {

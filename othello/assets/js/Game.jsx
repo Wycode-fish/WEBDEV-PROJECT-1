@@ -72,22 +72,21 @@ class Game extends Component {
   }
 
   clickTile(index) {
-    if (this.state.tiles[index] != 0) return;
+    if (!this.validClick(index)) return;
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
     let currAvailables = this.state.availables;
-
+    console.log("old board",board)
     let pid = (this.state.current==1)?1:2;
     let oid = (this.state.current==1)?2:1;
     let nextB = nextBoard(board, move, currAvailables, pid);
+    console.log("new board",nextB)
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
-    console.log('tiles', nextTiles)
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
       let whiteScore = getScore(nextB, oid)
-      console.log(blackScore)
       let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
         .receive("ok", (resp) => console.log("resp", resp))
@@ -100,5 +99,16 @@ class Game extends Component {
         .receive("ok", (resp) => console.log("resp", resp))
       // this.setState(newState)
     }
+  }
+  //check if the tile can be clicked
+  validClick(index) {
+    if (this.state.tiles[index] != 0) return false;
+    let x = Math.floor(index / 8)
+    let y = index % 8
+    let flag = false;
+    this.state.availables.forEach((a) => {
+      if (a[0] == x && a[1] == y) flag = true;
+    })
+    return flag;
   }
 }
