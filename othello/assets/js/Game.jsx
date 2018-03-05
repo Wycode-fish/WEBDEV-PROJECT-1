@@ -39,12 +39,7 @@ class Game extends Component {
     this.channel.on("chess", this.setState.bind(this))
   }
 
-  remote_play(msg) {
-    this.setState(msg)
-  }
-
   gotView(view) {
-    console.log("NEW VIEW", view)
     this.setState(view.game.state)
   }
 
@@ -94,12 +89,16 @@ class Game extends Component {
       let whiteScore = getScore(nextB, oid)
       console.log(blackScore)
       let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
-      this.setState(newState)
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => console.log("resp", resp))
+      // this.setState(newState)
     } else {
       let blackScore = getScore(nextB, oid)
       let whiteScore = getScore(nextB, pid)
       let newState = {current: 1, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
-      this.setState(newState)
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => console.log("resp", resp))
+      // this.setState(newState)
     }
   }
 }

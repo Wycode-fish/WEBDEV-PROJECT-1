@@ -3,8 +3,6 @@ defmodule OthelloWeb.GameController do
   alias Othello.Game
 
   def show(conn, %{"gname" => gname}) do
-    IO.puts "hhhhhhhhhh"
-    IO.inspect gname;
     user = get_session(conn, :user)
     game = Game.get(gname)
     host = (user == game[:host])
@@ -22,10 +20,10 @@ defmodule OthelloWeb.GameController do
 
   def join(conn, %{"join_data" => join}) do
     game = Game.join(join["game"], join["user"])
-    IO.inspect(game)
-    IO.puts("**************")
     conn
     |> put_session(:user, join["user"])
     |> redirect(to: "/g/" <> join["game"])
   end
+
+
 end
