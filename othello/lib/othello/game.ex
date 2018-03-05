@@ -22,9 +22,24 @@ defmodule Othello.Game do
     game = get(gname)
 
     if game do
-      game
+      state = Map.get(game, :state);
+      IO.puts "~~~~~~~~~~~~~~~~~";
+      # IO.inspect state;
+      IO.inspect Map.get(state, "player2")
+      IO.inspect Map.get(state, :player2)
+      if Map.get(state, "player2")=="" do
+        IO.puts "***************** player2 null";
+        state = state|>Map.put(:player2, user);
+        game = game|>Map.put(:state, state);
+        put(gname, game);
+      else
+        IO.puts "vvvvvvvvvvvvvvvvv player2 not null";
+        put(gname, game);
+      end
     else
       game = %{ name: gname, host: user, state: init_state() }
+      state = Map.get(game, :state)|>Map.put(:player1, user);
+      game = game|>Map.put(:state, state);
       put(gname, game)
     end
   end
@@ -42,7 +57,9 @@ defmodule Othello.Game do
                 0,0,0,0,0,0,0,0],
         current: 1,
         blackScore: 2,
-        whiteScore: 2
+        whiteScore: 2,
+        player1: "",
+        player2: "",
       }
 
   end

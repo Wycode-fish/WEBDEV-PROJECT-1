@@ -31,7 +31,9 @@ class Game extends Component {
       availables: [],
       current: 0,
       blackScore: 0,
-      whiteScore: 0
+      whiteScore: 0,
+      player1: "",
+      player2: ""
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -40,10 +42,15 @@ class Game extends Component {
   }
 
   gotView(view) {
-    this.setState(view.game.state)
+    console.log("xhhshs", view.game.state)
+    
+    this.channel.push("chess", {"state": view.game.state})
+        .receive("ok", (resp) => console.log("resp", resp))
+    //this.setState(view.game.state)
   }
 
   render() {
+    console.log("render",this.state);
     return (
     <div>
       <Container>
@@ -77,20 +84,22 @@ class Game extends Component {
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
     let currAvailables = this.state.availables;
-    console.log("old board",board)
+
     let pid = (this.state.current==1)?1:2;
     let oid = (this.state.current==1)?2:1;
     let nextB = nextBoard(board, move, currAvailables, pid);
-    console.log("new board",nextB)
+
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
+
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
       let whiteScore = getScore(nextB, oid)
       let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log("resp", resp))
-      // this.setState(newState)
+        .receive("ok", (resp) => console.log(this.state))
+
+
     } else {
       let blackScore = getScore(nextB, oid)
       let whiteScore = getScore(nextB, pid)

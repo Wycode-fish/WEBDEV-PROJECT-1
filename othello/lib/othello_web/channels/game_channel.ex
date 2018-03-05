@@ -5,11 +5,13 @@ defmodule OthelloWeb.GameChannel do
 
   def join("game:" <> gname, payload, socket) do
     game = Game.get(gname)
+    state = game|>Map.get(:state);
     IO.inspect(game)
     if authorized?(payload) do
       socket = socket
       |> Socket.assign(:name, gname)
       |> Socket.assign(:user, payload["user"])
+      # broadcast socket, "chess", state
       {:ok, %{ "game" => game}, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -19,11 +21,11 @@ defmodule OthelloWeb.GameChannel do
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("chess", %{"state" => state}, socket) do
+    IO.puts("broadcsat!!!!!!!")
+    IO.inspect(state)
     gname = socket.assigns[:name]
     user  = socket.assigns[:user]
     game =  %{ name: gname, host: user, state: state }
-    IO.puts("&&&&&&")
-    IO.inspect(game)
     Game.put(gname, game)
     cond do
       is_nil(user) ->
