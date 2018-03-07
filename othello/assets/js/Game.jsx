@@ -53,7 +53,7 @@ class Game extends Component {
   render() {
     console.log("render",this.state);
     return (
-    <div class="container-container">
+    <div className="container-container">
       <Container>
         <Row>
           <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
@@ -68,10 +68,11 @@ class Game extends Component {
 
   renderTiles(tiles) {
     return(
-      <div class="tile-panel">
+      <div className="tile-panel">
         <Row>
         {_.map(tiles, (tile,index) =>
           <Tile key = {index} index={index} content={tile} availables={this.state.availables}
+            current={this.state.current}
             clickTile={this.clickTile.bind(this)} />
         )}
       </Row>

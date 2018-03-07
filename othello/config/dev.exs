@@ -51,7 +51,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :othello, Othello.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "wangyichen",
+  username: "wangluqi",
   password: "",
   database: "othello_dev",
   hostname: "localhost",
