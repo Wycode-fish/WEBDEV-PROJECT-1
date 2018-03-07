@@ -24,29 +24,31 @@ export default function(props) {
     backgroundImage: 'url('+whiteUrl+')'
   }
 
-  // var blackOpaque = {
-  //   className: 'blackOpaque'
-  // }
-  //
-  // var whiteOpaque = {
-  //   className: 'whiteOpaque'
-  // }
-  //
+  var blackOpaque = {
+    backgroundImage: 'url('+black2+')'
+  }
+
+  var whiteOpaque = {
+    backgroundImage: 'url('+white2+')'
+  }
+
   // const onHoverChange = () => {
   //   $()
   // }
 
   const showContent = (content) => {
     if (content == 0) {
-      // let x = Math.floor(props.index / 8)
-      // let y = props.index % 8
-      // let flag = false;
-      // props.availables.forEach((a) => {
-      //   if (a[0] == x && a[1] == y) flag = true;
-      // })
-      // if (flag && props.current == 1) return blackOpaque;
-      // else if (flag && props.current == 2) return whiteOpaque;
-      // else return;
+      let x = Math.floor(props.index / 8)
+      let y = props.index % 8
+      let flag = false;
+      props.availables.forEach((a) => {
+        if (a[0] == x && a[1] == y) flag = true;
+      })
+      console.log("opaque",props.opaque);
+      console.log("index",props.index);
+      if (flag && props.current == 1 && props.opaque == props.index) return blackOpaque;
+      else if (flag && props.current == 2 && props.opaque == props.index) return whiteOpaque;
+      else return;
 
     } else if (content == 1) {
       return blackTileStyle;
@@ -55,21 +57,23 @@ export default function(props) {
     }
   };
 
-  const onEnterChange = () => {
-    console.log("enter");
-    // if (props.current == 1) $(this).addClass('blackOpaque');
-    // else if(props.current == 2) $(this).addClass('whiteOpaque');
-  }
-
-  const onLeaveChange = () => {
-    console.log("leave");
-    // if (props.current == 1) $(this).removeClass('blackOpaque');
-    // else if(props.current == 2) $(this).removeClass('whiteOpaque');
-  }
+  // const onEnterChange = () => {
+  //   console.log("enter", $(this));
+  //   // if (props.current == 1) $(this).addClass('blackOpaque');
+  //   // else if(props.current == 2) $(this).addClass('whiteOpaque');
+  // }
+  //
+  // const onLeaveChange = () => {
+  //   console.log("leave");
+  //   // if (props.current == 1) $(this).removeClass('blackOpaque');
+  //   // else if(props.current == 2) $(this).removeClass('whiteOpaque');
+  // }
 
   return (
     <div className="tile" onClick={() => props.clickTile(props.index)}
-       onMouseEnter={onEnterChange} onMouseLeave={onLeaveChange} style={showContent(props.content)}>
+       onMouseEnter={() => props.onEnterChange(props.index)}
+        onMouseLeave={() => props.onLeaveChange(props.index)}
+         style={showContent(props.content)}>
     </div>
   )
 }

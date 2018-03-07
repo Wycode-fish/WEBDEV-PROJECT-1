@@ -33,7 +33,8 @@ class Game extends Component {
       blackScore: 0,
       whiteScore: 0,
       player1: "",
-      player2: ""
+      player2: "",
+      opaque: -1,
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -58,7 +59,8 @@ class Game extends Component {
         <Row>
           <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
           <Col lg="4">
-            <Menu blackScore={this.state.blackScore} whiteScore={this.state.whiteScore}/>
+            <Menu current={this.state.current} player1={this.state.player1} player2={this.state.player2}
+               blackScore={this.state.blackScore} whiteScore={this.state.whiteScore}/>
           </Col>
         </Row>
       </Container>
@@ -73,7 +75,10 @@ class Game extends Component {
         {_.map(tiles, (tile,index) =>
           <Tile key = {index} index={index} content={tile} availables={this.state.availables}
             current={this.state.current}
-            clickTile={this.clickTile.bind(this)} />
+            opaque={this.state.opaque}
+            clickTile={this.clickTile.bind(this)}
+            onEnterChange={this.onEnterChange.bind(this)}
+            onLeaveChange={this.onLeaveChange.bind(this)} />
         )}
       </Row>
       </div>
@@ -141,5 +146,12 @@ class Game extends Component {
       if (a[0] == x && a[1] == y) flag = true;
     })
     return flag;
+  }
+
+  onEnterChange(index) {
+    this.setState({opaque: index});
+  }
+  onLeaveChange(index) {
+    this.setState({opaque: -1});
   }
 }
