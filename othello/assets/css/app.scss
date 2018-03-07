@@ -17,15 +17,20 @@
   padding: 0;
 }
 
+.scores {
+  background-image: url("../../images/board.jpg");
+  padding: 0;
+}
+
 .row {
   margin:0px;
 }
 
-.blackOpaque:hover {
+.blackOpaqueClass:hover {
   background-image: url("../../images/black2.jpg");
 }
 
-.whiteOpaque:hover {
+.whiteOpaqueClass:hover {
   background-image: url("../../images/white2.jpg");
 }
 
