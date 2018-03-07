@@ -6,5 +6,25 @@
   height: 5.65vw;
   border-style: solid;
   border-width: 3px;
-  background-image: url("http://image.ahpss.com/2017/01/dfnaons12.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  //background-color: grey;
+}
+
+.tile-panel {
+  background-image: url("../../images/zelda.jpg");
+  padding: 0;
+}
+
+.row {
+  margin:0px;
+}
+
+.container-container {
+  margin-left: 0;
+  padding: -1px;
+}
+body {
+
 }

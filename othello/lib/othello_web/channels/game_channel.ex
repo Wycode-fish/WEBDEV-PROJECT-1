@@ -8,11 +8,15 @@ defmodule OthelloWeb.GameChannel do
     state = game|>Map.get(:state);
     IO.inspect(game)
     if authorized?(payload) do
+      IO.puts "socket id-----------------"
+      IO.inspect socket
       socket = socket
       |> Socket.assign(:name, gname)
       |> Socket.assign(:user, payload["user"])
+      IO.puts "socket id-----------------"
+      IO.inspect socket
       # broadcast socket, "chess", state
-      {:ok, %{ "game" => game}, socket}
+      {:ok, %{ "game" => game, "page_user" => payload["user"]}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end

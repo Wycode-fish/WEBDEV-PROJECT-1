@@ -42,8 +42,9 @@ class Game extends Component {
   }
 
   gotView(view) {
-    console.log("xhhshs", view.game.state)
-    
+    console.log("config user: ",play_cfg.user);
+    console.log("view state: ", view.game.state)
+    console.log("page_user", view.page_user);
     this.channel.push("chess", {"state": view.game.state})
         .receive("ok", (resp) => console.log("resp", resp))
     //this.setState(view.game.state)
@@ -52,7 +53,7 @@ class Game extends Component {
   render() {
     console.log("render",this.state);
     return (
-    <div>
+    <div class="container-container">
       <Container>
         <Row>
           <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
@@ -67,7 +68,7 @@ class Game extends Component {
 
   renderTiles(tiles) {
     return(
-      <div>
+      <div class="tile-panel">
         <Row>
         {_.map(tiles, (tile,index) =>
           <Tile key = {index} index={index} content={tile} availables={this.state.availables}
@@ -80,6 +81,7 @@ class Game extends Component {
 
   clickTile(index) {
     if (!this.validClick(index)) return;
+
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
@@ -111,6 +113,25 @@ class Game extends Component {
   }
   //check if the tile can be clicked
   validClick(index) {
+    let curr = this.state.current;
+
+    let curr_name = (curr==1)?this.state.player1:this.state.player2;
+    let player = play_cfg.user;
+
+    console.log("JJJJJJJJJJJJ", player);
+
+
+    if (curr_name != player) return false;
+
+    // if (curr == 1 && this.state.player1!=player) {
+    //   return false;
+    // }
+
+    // else if (curr == 2 && this.state.player2!=player) {
+    //   return false;
+    // }
+
+
     if (this.state.tiles[index] != 0) return false;
     let x = Math.floor(index / 8)
     let y = index % 8
