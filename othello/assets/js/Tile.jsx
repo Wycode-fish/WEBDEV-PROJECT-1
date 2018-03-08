@@ -44,8 +44,6 @@ export default function(props) {
       props.availables.forEach((a) => {
         if (a[0] == x && a[1] == y) flag = true;
       })
-      console.log("opaque",props.opaque);
-      console.log("index",props.index);
       if (flag && props.current == 1 && props.opaque == props.index) return blackOpaque;
       else if (flag && props.current == 2 && props.opaque == props.index) return whiteOpaque;
       else return;

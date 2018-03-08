@@ -35,6 +35,7 @@ class Game extends Component {
       player1: "",
       player2: "",
       opaque: -1,
+      info:[]
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -43,24 +44,21 @@ class Game extends Component {
   }
 
   gotView(view) {
-    console.log("config user: ",play_cfg.user);
-    console.log("view state: ", view.game.state)
-    console.log("page_user", view.page_user);
     this.channel.push("chess", {"state": view.game.state})
         .receive("ok", (resp) => console.log("resp", resp))
     //this.setState(view.game.state)
   }
 
   render() {
-    console.log("render",this.state);
     return (
     <div className="container-container">
       <Container>
         <Row>
           <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
           <Col lg="4">
-            <Menu current={this.state.current} player1={this.state.player1} player2={this.state.player2}
-               blackScore={this.state.blackScore} whiteScore={this.state.whiteScore}/>
+            <Menu current={this.state.current} player1={this.state.player1}
+               player2={this.state.player2} blackScore={this.state.blackScore}
+               whiteScore={this.state.whiteScore} info={this.state.info}/>
           </Col>
         </Row>
       </Container>
@@ -128,7 +126,6 @@ class Game extends Component {
     let curr_name = (curr==1)?this.state.player1:this.state.player2;
     let player = play_cfg.user;
 
-    console.log("JJJJJJJJJJJJ", player);
 
 
     if (curr_name != player) return false;

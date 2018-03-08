@@ -23,22 +23,24 @@ defmodule Othello.Game do
 
     if game do
       state = Map.get(game, :state);
-      IO.puts "~~~~~~~~~~~~~~~~~";
-      # IO.inspect state;
-      IO.inspect Map.get(state, "player2")
-      IO.inspect Map.get(state, :player2)
       if Map.get(state, "player2")=="" do
         IO.puts "***************** player2 null";
         state = state|>Map.put(:player2, user);
+        info = Map.get(state, "info")
+        single_info = user <> " enter thr room"
+        info = List.insert_at(info, -1, single_info)
+        IO.puts "~~~~~~~~~~~~~~~~~";
+        IO.inspect info
+        IO.puts "~~~~~~~~~~~~~~~~~";
+        state = state|>Map.put(:info, info)
         game = game|>Map.put(:state, state);
         put(gname, game);
       else
-        IO.puts "vvvvvvvvvvvvvvvvv player2 not null";
         put(gname, game);
       end
     else
       game = %{ name: gname, host: user, state: init_state() }
-      state = Map.get(game, :state)|>Map.put(:player1, user);
+      state = Map.get(game, :state)|>Map.put(:player1, user)|>Map.put(:info, [user<>" enter the room"])
       game = game|>Map.put(:state, state);
       put(gname, game)
     end
@@ -60,6 +62,7 @@ defmodule Othello.Game do
         whiteScore: 2,
         player1: "",
         player2: "",
+        info: []
       }
 
   end
