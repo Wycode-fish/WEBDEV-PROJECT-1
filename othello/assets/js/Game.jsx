@@ -44,16 +44,16 @@ class Game extends Component {
   }
 
   gotView(view) {
-    console.log("config user: ",play_cfg.user);
-    console.log("view state: ", view.game.state)
-    console.log("page_user", view.page_user);
+    // console.log("config user: ",play_cfg.user);
+    // console.log("view state: ", view.game.state)
+    // console.log("page_user", view.page_user);
     this.channel.push("chess", {"state": view.game.state})
         .receive("ok", (resp) => console.log("resp", resp))
     //this.setState(view.game.state)
   }
 
   render() {
-    console.log("render",this.state);
+    // console.log("render",this.state);
     return (
     <div className="container-container">
       <Container>
@@ -104,7 +104,7 @@ class Game extends Component {
     if (currAvailables.length == 0) {
       let newState = {current: oid, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log(this.state))
+        .receive("ok", (resp) => {})
         return;
     }
 
@@ -113,7 +113,7 @@ class Game extends Component {
       let whiteScore = getScore(nextB, oid)
       let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log(this.state))
+        .receive("ok", (resp) => {})
 
 
     } else {
@@ -121,7 +121,7 @@ class Game extends Component {
       let whiteScore = getScore(nextB, pid)
       let newState = {current: 1, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log("resp", resp))
+        .receive("ok", (resp) => {})
       // this.setState(newState)
     }
   }
@@ -136,7 +136,7 @@ class Game extends Component {
     let curr_name = (curr==1)?this.state.player1:this.state.player2;
     let player = play_cfg.user;
 
-    console.log("JJJJJJJJJJJJ", player);
+    // console.log("JJJJJJJJJJJJ", player);
 
 
     if (curr_name != player) return false;

@@ -6,7 +6,13 @@
   background-image: url("../../images/banner.jpg");
   font-family: "Gill Sans", sans-serif;
   border-radius: 10px;
-  margin:30px;
+  height: 15%;
+  padding: 10px;
+  margin: 20px;
+}
+.banner p {
+  font-size: 20px;
+  color: white;
 }
 .tile {
   width: 12.5%;
