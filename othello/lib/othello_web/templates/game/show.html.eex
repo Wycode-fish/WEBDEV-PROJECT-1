@@ -7,7 +7,7 @@
 </script>
 <div class="row">
   <div class="col">
-    <h1 class="game-title">Othello Game: <%= @game %></h1>
+    <h1 class="banner">Othello Game: <%= @game %></h1>
     <script>
       window.gameName = "<%= @game %>";
     </script>

@@ -15,10 +15,10 @@
   <body data-page="<%= page_name(@view_module, @view_template) %>">
     <div class="container">
       <header>
-        <nav role="navigation">
+        <!-- <nav role="navigation">
           <ul class="nav nav-pills pull-right">
           </ul>
-        </nav>
+        </nav> -->
         <div class="clearfix"></div>
       </header>
 

@@ -94,9 +94,16 @@ class Game extends Component {
     let pid = (this.state.current==1)?1:2;
     let oid = (this.state.current==1)?2:1;
     let nextB = nextBoard(board, move, currAvailables, pid);
-
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
+
+    if (currAvailables.length == 0) {
+      console.log("CAN NOT MOVE!!!")
+      let newState = {current: oid, availables: nextA}
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => console.log(this.state))
+        return;
+    }
 
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)

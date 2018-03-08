@@ -54,6 +54,7 @@ export function searchPos (curr, pos, dir) {
 	else if (dir == TOP_RIGHT) {
 		m = i-1;
 		n = j+1;
+		if (m < 0 || n < 0 || m >= 8 || n >= 8) console.log("OUT OF RANGE")
 		while (curr[m][n]==oid && m>0 && n<size-1) {
 			m--;
 			n++;
