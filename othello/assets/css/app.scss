@@ -1,6 +1,13 @@
 /* This file is for your main application css. */
 @import "bootstrap";
 
+
+.banner {
+  background-image: url("../../images/banner.jpg");
+  font-family: "Gill Sans", sans-serif;
+  border-radius: 10px;
+  margin:30px;
+}
 .tile {
   width: 12.5%;
   height: 5.65vw;
@@ -9,15 +16,23 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  border-radius: 10px;
+
   //background-color: grey;
 }
 
-.tile-panel {
+.index-page{
+  text-align: center;
+  width: 40%;
+  padding-top:100px;
+}
 
+.tile-panel {
   padding: 0;
 }
 
 .scores {
+  font-family: "Gill Sans", sans-serif;
   background-image: url("../../images/board.jpg");
   background-position: center;
   padding-top: 50px;
@@ -42,5 +57,5 @@
   padding: -1px;
 }
 body {
-  background-image: url("../../images/bg2.jpg");
+  background-image: url("../../images/bg.jpg");
 }

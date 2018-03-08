@@ -35,6 +35,7 @@ class Game extends Component {
       player1: "",
       player2: "",
       opaque: -1,
+      info:[]
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -60,7 +61,8 @@ class Game extends Component {
           <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
           <Col lg="4">
             <Menu current={this.state.current} player1={this.state.player1} player2={this.state.player2}
-               blackScore={this.state.blackScore} whiteScore={this.state.whiteScore}/>
+               blackScore={this.state.blackScore} whiteScore={this.state.whiteScore}
+               info={this.state.info}/>
           </Col>
         </Row>
       </Container>
@@ -96,9 +98,15 @@ class Game extends Component {
     let pid = (this.state.current==1)?1:2;
     let oid = (this.state.current==1)?2:1;
     let nextB = nextBoard(board, move, currAvailables, pid);
-
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
+
+    if (currAvailables.length == 0) {
+      let newState = {current: oid, availables: nextA}
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => console.log(this.state))
+        return;
+    }
 
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
