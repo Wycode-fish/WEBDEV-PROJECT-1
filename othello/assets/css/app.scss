@@ -13,19 +13,27 @@
 }
 
 .tile-panel {
-  background-image: url("../../images/zelda.jpg");
+
   padding: 0;
+}
+
+.scores {
+  background-image: url("../../images/board.jpg");
+  background-position: center;
+  padding-top: 50px;
+  height:100%;
+  border-radius: 10px;
 }
 
 .row {
   margin:0px;
 }
 
-.blackOpaque:hover {
+.blackOpaqueClass:hover {
   background-image: url("../../images/black2.jpg");
 }
 
-.whiteOpaque:hover {
+.whiteOpaqueClass:hover {
   background-image: url("../../images/white2.jpg");
 }
 
@@ -34,5 +42,5 @@
   padding: -1px;
 }
 body {
-
+  background-image: url("../../images/bg2.jpg");
 }

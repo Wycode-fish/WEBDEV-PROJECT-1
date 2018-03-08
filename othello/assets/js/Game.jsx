@@ -7,14 +7,14 @@ import Menu from './Menu'
 import { searchPos, nextAvailables, nextBoard, list2Arr, getScore, arr2List } from './logic'
 
 // Global Constants
-let TOP_LEFT 	= 1;
-let TOP 	 	= 2;
-let TOP_RIGHT 	= 3;
-let RIGHT 		= 4;
-let DOWN_RIGHT 	= 5;
-let DOWN 		= 6;
-let DOWN_LEFT 	= 7;
-let LEFT 		= 8;
+let TOP_LEFT  = 1;
+let TOP    = 2;
+let TOP_RIGHT  = 3;
+let RIGHT   = 4;
+let DOWN_RIGHT  = 5;
+let DOWN   = 6;
+let DOWN_LEFT  = 7;
+let LEFT   = 8;
 let SIZE = 8;
 
 export default function run_game(root, channel) {
@@ -119,6 +119,10 @@ class Game extends Component {
   }
   //check if the tile can be clicked
   validClick(index) {
+    if (this.state.player2 == "") {
+      alert("You need to wait another player")
+      return false;
+    }
     let curr = this.state.current;
 
     let curr_name = (curr==1)?this.state.player1:this.state.player2;
