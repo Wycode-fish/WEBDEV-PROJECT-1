@@ -18,6 +18,11 @@ defmodule Othello.Game do
     Agent.get(__MODULE__, &Map.get(&1, gname))
   end
 
+  def get_rooms do
+    Agent.get(__MODULE__, &(&1))
+    |> Map.keys
+  end
+
   def join(gname, user) do
     game = get(gname)
 

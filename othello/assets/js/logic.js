@@ -93,8 +93,10 @@ export function searchPos (curr, pos, dir) {
 	}
 	// down-right
 	else if (dir == DOWN_RIGHT) {
+
 		m = i+1;
 		n = j+1;
+		console.log("enter down right.", m);
 		if (m<size && n<size) {
 			while (curr[m][n]==oid && m<size-1 && n<size-1) {
 				m++;
@@ -345,7 +347,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    }
    // up right
    if (curr[i-1][1]==oid) {
-    let pos = searchPos(curr, [0,i], TOP_RIGHT);
+    let pos = searchPos(curr, [i,0], TOP_RIGHT);
 		if (pos.length!=0){
 			if (curr[pos[0]][pos[1]]==0) {
 			 pos.push(i);
@@ -356,7 +358,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    }
    // down right
    if (curr[i+1][1]==oid) {
-    let pos = searchPos(curr, [0,i], DOWN_RIGHT);
+   	console.log("i:"+i, "j:"+0);
+    let pos = searchPos(curr, [i,0], DOWN_RIGHT);
 		if (pos.length!=0){
 			if (curr[pos[0]][pos[1]]==0) {
 			 pos.push(i);
@@ -367,7 +370,7 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    }
    // right
    if (curr[i][1]==oid) {
-    let pos = searchPos(curr, [0,i], RIGHT);
+    let pos = searchPos(curr, [i,0], RIGHT);
 		if (pos.length!=0){
 			if (curr[pos[0]][pos[1]]==0) {
 			 pos.push(i);

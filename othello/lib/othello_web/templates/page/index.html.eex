@@ -1,8 +1,6 @@
 <div class="index-page container">
   <h1>Welcome to Othello</h1>
 
-
-
   <h2>Join a Game</h2>
 
   <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
@@ -16,4 +14,12 @@
   </div>
   <%= submit "Join", class: "btn btn-primary" %>
   <% end %>
+
+  <ul>
+    <%= for room <- @rooms do %>
+      <li><%= room %></li> <%= link "Enter", to: "/g/" <> room, class: "btn btn-default btn-xs" %>
+    <% end %>
+  </ul>
+
+
 </div>
