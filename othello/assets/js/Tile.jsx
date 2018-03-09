@@ -55,23 +55,15 @@ export default function(props) {
     }
   };
 
-  // const onEnterChange = () => {
-  //   console.log("enter", $(this));
-  //   // if (props.current == 1) $(this).addClass('blackOpaque');
-  //   // else if(props.current == 2) $(this).addClass('whiteOpaque');
-  // }
-  //
-  // const onLeaveChange = () => {
-  //   console.log("leave");
-  //   // if (props.current == 1) $(this).removeClass('blackOpaque');
-  //   // else if(props.current == 2) $(this).removeClass('whiteOpaque');
-  // }
 
   return (
-    <div className="tile" onClick={() => props.clickTile(props.index)}
-       onMouseEnter={() => props.onEnterChange(props.index)}
-        onMouseLeave={() => props.onLeaveChange(props.index)}
-         style={showContent(props.content)}>
+    <div className="parent">
+      <div className="tile" onClick={() => props.clickTile(props.index)}
+         onMouseEnter={() => props.onEnterChange(props.index)}
+          onMouseLeave={() => props.onLeaveChange(props.index)}
+           style={showContent(props.content)}>
+      </div>
     </div>
+
   )
 }

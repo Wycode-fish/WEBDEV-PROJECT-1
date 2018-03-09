@@ -37,76 +37,130 @@ export function searchPos (curr, pos, dir) {
 	if (dir == TOP_LEFT) {
 		m = i-1;
 		n = j-1;
-		while (curr[m][n]==oid && m>0 && n>0) {
-			m--;
-			n--;
+		if (m>=0 && n>=0) {
+			while (curr[m][n]==oid && m>0 && n>0) {
+				m--;
+				n--;
+			}
+		}
+		if (m==i-1 && n==j-1) {
+			m = null;
+			n = null;
 		}
 	}
 	// top
 	else if (dir == TOP) {
 		m = i-1;
 		n = j;
-		while (curr[m][n]==oid && m>0) {
-			m--;
+		if (m>=0) {
+			while (curr[m][n]==oid && m>0) {
+				m--;
+			}
+		}
+		if (m==i-1) {
+			m = null;
+			n = null;
 		}
 	}
 	// top-right
 	else if (dir == TOP_RIGHT) {
 		m = i-1;
 		n = j+1;
-		if (m < 0 || n < 0 || m >= 8 || n >= 8) console.log("OUT OF RANGE")
-		while (curr[m][n]==oid && m>0 && n<size-1) {
-			m--;
-			n++;
+		if (m>=0 && n<size) {
+			while (curr[m][n]==oid && m>0 && n<size-1) {
+				m--;
+				n++;
+			}
+		}
+		if (m==i-1 && n==j+1) {
+			m = null;
+			n = null;
 		}
 	}
 	// right
 	else if (dir == RIGHT) {
 		m = i;
 		n = j+1;
-		while (curr[m][n]==oid && n<size-1) {
-			n++;
+		if (n<size) {
+			while (curr[m][n]==oid && n<size-1) {
+				n++;
+			}
+		}
+		if (n==j+1) {
+			m = null;
+			n = null;
 		}
 	}
 	// down-right
 	else if (dir == DOWN_RIGHT) {
 		m = i+1;
 		n = j+1;
-		while (curr[m][n]==oid && m<size-1 && n<size-1) {
-			m++;
-			n++;
+		if (m<size && n<size) {
+			while (curr[m][n]==oid && m<size-1 && n<size-1) {
+				m++;
+				n++;
+			}
+		}
+		if (m==i+1 && n==j+1) {
+			m = null;
+			n = null;
 		}
 	}
 	// down
 	else if (dir == DOWN) {
 		m = i+1;
 		n = j;
-		while (curr[m][n]==oid && m<size-1) {
-			m++;
+		if (m < size-1) {
+			while (curr[m][n]==oid && m<size-1) {
+				m++;
+			}
+		}
+		if (m==i+1) {
+			m = null;
+			n = null;
 		}
 	}
 	// down-left
 	else if (dir == DOWN_LEFT) {
 		m = i+1;
 		n = j-1;
-		while (curr[m][n]==oid && m<size-1 && n>0) {
-			m++;
-			n--;
+		if (m < size && n >= 0) {
+			while (curr[m][n]==oid && m<size-1 && n>0) {
+				m++;
+				n--;
+			}
+		}
+		// while (curr[m][n]==oid && m<size-1 && n>0) {
+		// 	m++;
+		// 	n--;
+		// }
+		if (m==i+1 && n==j-1) {
+			m = null;
+			n = null;
 		}
 	}
 	// left
 	else {
 		m = i;
 		n = j-1;
-		while (curr[m][n]==oid && n>0) {
-			n--;
+
+		if (n>=0) {
+			while (curr[m][n]==oid && n>0) {
+				n--;
+			}
+		}
+		// while (curr[m][n]==oid && n>0) {
+		// 	n--;
+		// }
+		if (n==j-1) {
+			m = null;
+			n = null;
 		}
 	}
 
 	if (m!=null && n!=null)	return [m,n];
 	else return [];
 }
-
 
 
 export function nextAvailables (curr, pid) { // curr: current board; pid: player id
@@ -207,47 +261,57 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    // left
    if (curr[0][i-1]==oid) {
     let pos = searchPos(curr, [0,i], LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(0);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+	    if (curr[pos[0]][pos[1]]==0) {
+	     pos.push(0);
+	     pos.push(i);
+	     positions.push(pos);
+	    }
+		}
    }
    // down left
    if (curr[1][i-1]==oid) {
     let pos = searchPos(curr, [0,i], DOWN_LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(0);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0) {
+	    if (curr[pos[0]][pos[1]]==0) {
+	     pos.push(0);
+	     pos.push(i);
+	     positions.push(pos);
+	    }
+		}
    }
    // down
    if (curr[1][i]==oid) {
     let pos = searchPos(curr, [0,i], DOWN);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(0);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0) {
+	    if (curr[pos[0]][pos[1]]==0) {
+	     pos.push(0);
+	     pos.push(i);
+	     positions.push(pos);
+	    }
+		}
    }
    // down right
    if (curr[1][i+1]==oid) {
     let pos = searchPos(curr, [0,i], DOWN_RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(0);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0) {
+	    if (curr[pos[0]][pos[1]]==0) {
+	     pos.push(0);
+	     pos.push(i);
+	     positions.push(pos);
+	    }
+		}
    }
    // right
    if (curr[0][i+1]==oid) {
     let pos = searchPos(curr, [0,i], RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(0);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0) {
+	    if (curr[pos[0]][pos[1]]==0) {
+	     pos.push(0);
+	     pos.push(i);
+	     positions.push(pos);
+	    }
+		}
    }
 
   }
@@ -260,47 +324,57 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    // up
    if (curr[i-1][0]==oid) {
     let pos = searchPos(curr, [i,0], TOP);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(0);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(0);
+			 positions.push(pos);
+			}
+		 }
    }
    // down
    if (curr[i+1][0]==oid) {
     let pos = searchPos(curr, [i,0], DOWN);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(0);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(0);
+			 positions.push(pos);
+			}
+		 }
    }
    // up right
    if (curr[i-1][1]==oid) {
     let pos = searchPos(curr, [0,i], TOP_RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(0);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(0);
+			 positions.push(pos);
+			}
+		 }
    }
    // down right
    if (curr[i+1][1]==oid) {
     let pos = searchPos(curr, [0,i], DOWN_RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(0);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(0);
+			 positions.push(pos);
+			}
+		 }
    }
    // right
    if (curr[i][1]==oid) {
     let pos = searchPos(curr, [0,i], RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(0);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(0);
+			 positions.push(pos);
+			}
+		 }
    }
 
   }
@@ -313,47 +387,57 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    // up
    if (curr[i-1][size-1]==oid) {
     let pos = searchPos(curr, [i,size-1], TOP);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(size-1);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(size-1);
+			 positions.push(pos);
+			}
+		 }
    }
    // down
    if (curr[i+1][size-1]==oid) {
     let pos = searchPos(curr, [i,size-1], DOWN);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(size-1);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(size-1);
+			 positions.push(pos);
+			}
+		 }
    }
    // up left
    if (curr[i-1][size-2]==oid) {
     let pos = searchPos(curr, [i,size-1], TOP_LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(size-1);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(size-1);
+			 positions.push(pos);
+			}
+		 }
    }
    // down left
    if (curr[i+1][size-2]==oid) {
     let pos = searchPos(curr, [i,size-1], DOWN_LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(size-1);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(size-1);
+			 positions.push(pos);
+			}
+		 }
    }
    // left
    if (curr[i][size-2]==oid) {
     let pos = searchPos(curr, [i,size-1], LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(i);
-     pos.push(size-1);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(i);
+			 pos.push(size-1);
+			 positions.push(pos);
+			}
+		 }
    }
 
   }
@@ -366,47 +450,57 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
    // up
    if (curr[size-2][i]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(size-1);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(size-1);
+			 pos.push(i);
+			 positions.push(pos);
+			}
+		 }
    }
    // left
    if (curr[size-1][i-1]==oid) {
     let pos = searchPos(curr, [size-1,i], LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(size-1);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(size-1);
+			 pos.push(i);
+			 positions.push(pos);
+			}
+		 }
    }
    // up left
    if (curr[size-2][i-1]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP_LEFT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(size-1);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(size-1);
+			 pos.push(i);
+			 positions.push(pos);
+			}
+		 }
    }
    // up right
    if (curr[size-2][i+1]==oid) {
     let pos = searchPos(curr, [size-1,i], TOP_RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(size-1);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(size-1);
+			 pos.push(i);
+			 positions.push(pos);
+			}
+		 }
    }
    // right
    if (curr[size-1][i+1]==oid) {
     let pos = searchPos(curr, [size-1,i], RIGHT);
-    if (curr[pos[0]][pos[1]]==0) {
-     pos.push(size-1);
-     pos.push(i);
-     positions.push(pos);
-    }
+		if (pos.length!=0){
+			if (curr[pos[0]][pos[1]]==0) {
+			 pos.push(size-1);
+			 pos.push(i);
+			 positions.push(pos);
+			}
+		 }
    }
 
   }
@@ -420,88 +514,104 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
     // top-left
     if (curr[i-1][j-1]==oid) {
      let pos = searchPos(curr, [i,j], TOP_LEFT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // top
     if (curr[i-1][j]==oid) {
      let pos = searchPos(curr, [i,j], TOP);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // top-right
     if (curr[i-1][j+1]==oid) {
      let pos = searchPos(curr, [i,j], TOP_RIGHT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // right
     if (curr[i][j+1]==oid) {
      let pos = searchPos(curr, [i,j], RIGHT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // down-right
     if (curr[i+1][j+1]==oid) {
      let pos = searchPos(curr, [i,j], DOWN_RIGHT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // down
     if (curr[i+1][j]==oid) {
      let pos = searchPos(curr, [i,j], DOWN);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // down-left
     if (curr[i+1][j-1]==oid) {
      let pos = searchPos(curr, [i,j], DOWN_LEFT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
 
 
     // left
     if (curr[i][j-1]==oid) {
      let pos = searchPos(curr, [i,j], LEFT);
-     if (curr[pos[0]][pos[1]]==0) {
-      pos.push(i);
-      pos.push(j);
-      positions.push(pos);
-     }
+		 if (pos.length!=0){
+	     if (curr[pos[0]][pos[1]]==0) {
+	      pos.push(i);
+	      pos.push(j);
+	      positions.push(pos);
+	     }
+	 		}
     }
    }
   }

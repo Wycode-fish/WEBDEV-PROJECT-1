@@ -84,8 +84,6 @@ class Game extends Component {
   }
 
   clickTile(index) {
-    if (!this.validClick(index)) return;
-
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
@@ -96,21 +94,20 @@ class Game extends Component {
     let nextB = nextBoard(board, move, currAvailables, pid);
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
-
     if (currAvailables.length == 0) {
       console.log("CAN NOT MOVE!!!")
       let newState = {current: oid, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log(this.state))
+        .receive("ok", (resp) => {})
         return;
     }
-
+    if (!this.validClick(index)) return;
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
       let whiteScore = getScore(nextB, oid)
       let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log(this.state))
+        .receive("ok", (resp) => {})
 
 
     } else {
@@ -118,8 +115,7 @@ class Game extends Component {
       let whiteScore = getScore(nextB, pid)
       let newState = {current: 1, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
       this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => console.log("resp", resp))
-      // this.setState(newState)
+        .receive("ok", (resp) => {})
     }
   }
   //check if the tile can be clicked
@@ -132,20 +128,7 @@ class Game extends Component {
 
     let curr_name = (curr==1)?this.state.player1:this.state.player2;
     let player = play_cfg.user;
-
-
-
     if (curr_name != player) return false;
-
-    // if (curr == 1 && this.state.player1!=player) {
-    //   return false;
-    // }
-
-    // else if (curr == 2 && this.state.player2!=player) {
-    //   return false;
-    // }
-
-
     if (this.state.tiles[index] != 0) return false;
     let x = Math.floor(index / 8)
     let y = index % 8
