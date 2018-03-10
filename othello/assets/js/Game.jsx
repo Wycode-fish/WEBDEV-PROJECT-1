@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Container, Col, Row } from 'reactstrap';
+import { Button, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import _ from 'underscore';
 import Tile from './Tile';
 import Menu from './Menu'
@@ -21,7 +21,6 @@ export default function run_game(root, channel) {
   ReactDOM.render(<Game channel={channel} />, root);
 }
 
-
 class Game extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +34,7 @@ class Game extends Component {
       player1: "",
       player2: "",
       opaque: -1,
-
+      end: false
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -45,83 +44,89 @@ class Game extends Component {
 
   funcA (state) {
     this.setState(state, () => {
-      if (state.availables.length==0) {
-        console.log("CAN NOT MOVE!")
-        if (this.state.blackScore + this.state.whiteScore == 64) {
-          this.checkWin();
-          return;
-        }
-        // let move = [Math.floor(index/8), index%8];
-        let tiles = this.state.tiles;
-        let board = list2Arr(tiles, SIZE);
-        let currAvailables = state.availables;
-        let pid = (state.current==1)?1:2;
-        let oid = (state.current==1)?2:1;
-        // let nextB = nextBoard(board, move, currAvailables, pid);
-        let nextA = nextAvailables(board, oid);
-        if (nextA.length == 0) {
-          this.checkWin();
-          return;
-        }
-        let nextTiles = arr2List(board, SIZE)
+      if (state.end) {
+        this.setState(state)
+      }
+      else {
+        if (state.availables.length==0) {
+          console.log("CAN NOT MOVE!")
+          // let move = [Math.floor(index/8), index%8];
+          let tiles = this.state.tiles;
+          let board = list2Arr(tiles, SIZE);
+          let currAvailables = state.availables;
+          let pid = (state.current==1)?1:2;
+          let oid = (state.current==1)?2:1;
+          // let nextB = nextBoard(board, move, currAvailables, pid);
+          let nextA = nextAvailables(board, oid);
+          if (nextA.length == 0) {
+            let newState = this.state
+            newState['end'] = true;
+            this.channel.push("chess", {"state": newState})
+              .receive("ok", (resp) => {})
+            return;
+          }
 
-        // let newState = {current: oid, availables: nextA}
-        let newState = this.state
-        newState['current'] = oid
-        newState['availables'] = nextA
-        this.channel.push("chess", {"state": newState})
-          .receive("ok", (resp) => {})
+          let nextTiles = arr2List(board, SIZE)
+
+          // let newState = {current: oid, availables: nextA}
+          let newState = this.state
+          newState['current'] = oid
+          newState['availables'] = nextA
+          this.channel.push("chess", {"state": newState})
+            .receive("ok", (resp) => {})
+        }
       }
     })
   }
 
-  checkWin() {
-      if (this.state.blackScore > this.state.whiteScore) {
-        alert("Black Win!!!")
-      } else if (this.state.blackScore < this.state.whiteScore) {
-        alert("White Win!!!")
-      } else {
-        atert("Tie!!!")
-      }
-      if (confirm("Play Again ?")) {
-        // let newState = {
-        //   availables: [ [5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3] ],
-        //   tiles: [0,0,0,0,0,0,0,0,
-        //           0,0,0,0,0,0,0,0,
-        //           0,0,0,0,0,0,0,0,
-        //           0,0,0,2,1,0,0,0,
-        //           0,0,0,1,2,0,0,0,
-        //           0,0,0,0,0,0,0,0,
-        //           0,0,0,0,0,0,0,0,
-        //           0,0,0,0,0,0,0,0],
-        //   current: 1,
-        //   blackScore: 2,
-        //   whiteScore: 2
-        // }
-        let newState = this.state
-        newState['tiles'] = [0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,2,1,0,0,0,
-                0,0,0,1,2,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0];
-        newState['current'] = 1;
-        newState['blackScore'] = 2;
-        newState['whiteScore'] = 2;
-        this.channel.push("chess", {"state": newState})
-          .receive("ok", (resp) => {})
-      }
-  }
 
+  getRes() {
+      let res;
+      if (this.state.blackScore > this.state.whiteScore) {
+        res = "Black Win "
+      } else if (this.state.blackScore < this.state.whiteScore) {
+        res = "White Win"
+      } else {
+        res = "Tie"
+      }
+      res = res+" BlackScore:"+this.state.blackScore+" WhiteScore:"+this.state.whiteScore;
+      return res;
+    }
+    
   gotView(view) {
     this.channel.push("chess", {"state": view.game.state})
         .receive("ok", (resp) => console.log("resp", resp))
     //this.setState(view.game.state)
   }
 
+  game_again(){
+    let newState = this.state
+    newState['tiles'] = [0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            0,0,0,2,1,0,0,0,
+            0,0,0,1,2,0,0,0,
+            0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0];
+    newState['current'] = 1;
+    newState['player1'] = "";
+    newState['player2'] = "";
+    newState['blackScore'] = 2;
+    newState['whiteScore'] = 2;
+    newState['end'] = false;
+    this.channel.push("chess", {"state": newState})
+      .receive("ok", (resp) => {})
+   this.setState(newState);
+    // window.location = '/g/' + "<%= @game %>";
+  }
+
+  leave_room(){
+     window.location = '/';
+   }
+
   render() {
+    let res = this.getRes();
     return (
     <div className="container-container">
       <Container>
@@ -137,7 +142,31 @@ class Game extends Component {
           </Col>
         </Row>
       </Container>
+      <div>
+        <Modal isOpen={this.state.end}>
+        <ModalHeader>Game Over</ModalHeader>
+          <ModalBody>
+            {res}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.game_again.bind(this)}>Again</Button>{' '}
+            <Button color="secondary" onClick={this.leave_room}>Leave</Button>
+          </ModalFooter>
+        </Modal>
+      </div>
     </div>
+    // <div>
+    //   <Modal isOpen={this.isEnd} className={this.props.className}>
+    //     <ModalHeader>Modal title</ModalHeader>
+    //     <ModalBody>
+    //
+    //     </ModalBody>
+    //     <ModalFooter>
+    //       <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
+    //       <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+    //     </ModalFooter>
+    //   </Modal>
+    // </div>
     )
   }
 
@@ -192,6 +221,8 @@ class Game extends Component {
         .receive("ok", (resp) => {})
     }
   }
+
+
   //check if the tile can be clicked
   validClick(index) {
     if (this.state.player2 == "" || this.state.player1 == "") {
@@ -213,12 +244,18 @@ class Game extends Component {
     return flag;
   }
 
+
+
+
   onEnterChange(index) {
     this.setState({opaque: index});
   }
   onLeaveChange(index) {
     this.setState({opaque: -1});
   }
+
+
+
 
   pickWhite() {
     if (this.state.player2 != "" && this.state.player2 != play_cfg.user) {
@@ -230,13 +267,11 @@ class Game extends Component {
     if (play_cfg.user == this.state.player1) {
       newState['player1'] = ""
     }
-    $('.pick-white').removeClass('btn-primary').addClass('btn-warning');
-    $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
-    $('.pick-observer').removeClass('btn-warning').addClass('btn-primary');
     console.log("Pick White")
     this.channel.push("chess", {"state": newState})
       .receive("ok", (resp) => {})
   }
+
   pickBlack() {
     if (this.state.player1 != "" && this.state.player1 != play_cfg.user) {
         alert("Black has been picked by another user!")
@@ -247,9 +282,7 @@ class Game extends Component {
     if (play_cfg.user == this.state.player2) {
       newState['player2'] = ""
     }
-    $('.pick-black').removeClass('btn-primary').addClass('btn-warning');
-    $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
-    $('.pick-observer').removeClass('btn-warning').addClass('btn-primary');
+
     console.log("Pick Black")
     this.channel.push("chess", {"state": newState})
       .receive("ok", (resp) => {})
@@ -259,17 +292,11 @@ class Game extends Component {
     if (this.state.player1 == play_cfg.user) {
       let newState = this.state
       newState['player1'] = ""
-      $('.pick-observer').removeClass('btn-primary').addClass('btn-warning');
-      $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
-      $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
       this.channel.push("chess", {"state": newState})
         .receive("ok", (resp) => {})
     } else if (this.state.player2 == play_cfg.user) {
       let newState = this.state
       newState['player2'] = ""
-      $('.pick-observer').removeClass('btn-primary').addClass('btn-warning');
-      $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
-      $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
       console.log("newState:", newState);
       this.channel.push("chess", {"state": newState})
         .receive("ok", (resp) => {})

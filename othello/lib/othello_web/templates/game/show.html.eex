@@ -5,15 +5,6 @@
    host: <%= @host %>,
  };
 
- function game_again(){
-  // console.log('localhost:4000/g/' + <%= @game %>);
-   window.location = '/g/' + "<%= @game %>";
- }
-
- function leave_room(){
-   console.log('haha');
-    window.location = '/';
-  }
 </script>
 <div class="row">
   <div class="col">
@@ -23,34 +14,6 @@
     </script>
     <div id="game">
       <p>React app not loaded...</p >
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Game Over</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        XXX Wins
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="again-btn btn btn-primary" onclick="game_again()">Again!</button>
-        <button type="button" class="leave-room-btn btn btn-warning" data-dismiss="modal" onclick="leave_room()">Leave</button>
-      </div>
     </div>
   </div>
 </div>
