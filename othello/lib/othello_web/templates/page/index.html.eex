@@ -12,14 +12,13 @@
     <%= label(f, :game, "Game Name") %>
     <%= text_input(f, :game, class: "form-control") %>
   </div>
+  <div class="form-group">
+      Available Play Rooms:
+      <%= select(f, :room, @rooms, prompt: "Choose your room", class: "form-control") %>
+      <br>
+  </div>
   <%= submit "Join", class: "btn btn-primary" %>
   <% end %>
-
-  <ul>
-    <%= for room <- @rooms do %>
-      <li><%= room %></li> <%= link "Enter", to: "/g/" <> room, class: "btn btn-default btn-xs" %>
-    <% end %>
-  </ul>
 
 
 </div>

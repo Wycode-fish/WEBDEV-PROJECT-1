@@ -28,140 +28,140 @@ export function hello() {
 
 export function searchPos (curr, pos, dir) {
 
-	let i = pos[0];
-	let j = pos[1];
-	let oid = (curr[i][j]==1)?2:1;
-	let m;
-	let n;
-	// top-left
-	if (dir == TOP_LEFT) {
-		m = i-1;
-		n = j-1;
-		if (m>=0 && n>=0) {
-			while (curr[m][n]==oid && m>0 && n>0) {
-				m--;
-				n--;
-			}
-		}
-		if (m==i-1 && n==j-1) {
-			m = null;
-			n = null;
-		}
-	}
-	// top
-	else if (dir == TOP) {
-		m = i-1;
-		n = j;
-		if (m>=0) {
-			while (curr[m][n]==oid && m>0) {
-				m--;
-			}
-		}
-		if (m==i-1) {
-			m = null;
-			n = null;
-		}
-	}
-	// top-right
-	else if (dir == TOP_RIGHT) {
-		m = i-1;
-		n = j+1;
-		if (m>=0 && n<size) {
-			while (curr[m][n]==oid && m>0 && n<size-1) {
-				m--;
-				n++;
-			}
-		}
-		if (m==i-1 && n==j+1) {
-			m = null;
-			n = null;
-		}
-	}
-	// right
-	else if (dir == RIGHT) {
-		m = i;
-		n = j+1;
-		if (n<size) {
-			while (curr[m][n]==oid && n<size-1) {
-				n++;
-			}
-		}
-		if (n==j+1) {
-			m = null;
-			n = null;
-		}
-	}
-	// down-right
-	else if (dir == DOWN_RIGHT) {
+ let i = pos[0];
+ let j = pos[1];
+ let oid = (curr[i][j]==1)?2:1;
+ let m;
+ let n;
+ // top-left
+ if (dir == TOP_LEFT) {
+  m = i-1;
+  n = j-1;
+  if (m>=0 && n>=0) {
+   while (curr[m][n]==oid && m>0 && n>0) {
+    m--;
+    n--;
+   }
+  }
+  if ((m==i-1 && n==j-1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // top
+ else if (dir == TOP) {
+  m = i-1;
+  n = j;
+  if (m>=0) {
+   while (curr[m][n]==oid && m>0) {
+    m--;
+   }
+  }
+  if ((m==i-1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // top-right
+ else if (dir == TOP_RIGHT) {
+  m = i-1;
+  n = j+1;
+  if (m>=0 && n<size) {
+   while (curr[m][n]==oid && m>0 && n<size-1) {
+    m--;
+    n++;
+   }
+  }
+  if ((m==i-1 && n==j+1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // right
+ else if (dir == RIGHT) {
+  m = i;
+  n = j+1;
+  if (n<size) {
+   while (curr[m][n]==oid && n<size-1) {
+    n++;
+   }
+  }
+  if (n==j+1 || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // down-right
+ else if (dir == DOWN_RIGHT) {
 
-		m = i+1;
-		n = j+1;
-		console.log("enter down right.", m);
-		if (m<size && n<size) {
-			while (curr[m][n]==oid && m<size-1 && n<size-1) {
-				m++;
-				n++;
-			}
-		}
-		if (m==i+1 && n==j+1) {
-			m = null;
-			n = null;
-		}
-	}
-	// down
-	else if (dir == DOWN) {
-		m = i+1;
-		n = j;
-		if (m < size-1) {
-			while (curr[m][n]==oid && m<size-1) {
-				m++;
-			}
-		}
-		if (m==i+1) {
-			m = null;
-			n = null;
-		}
-	}
-	// down-left
-	else if (dir == DOWN_LEFT) {
-		m = i+1;
-		n = j-1;
-		if (m < size && n >= 0) {
-			while (curr[m][n]==oid && m<size-1 && n>0) {
-				m++;
-				n--;
-			}
-		}
-		// while (curr[m][n]==oid && m<size-1 && n>0) {
-		// 	m++;
-		// 	n--;
-		// }
-		if (m==i+1 && n==j-1) {
-			m = null;
-			n = null;
-		}
-	}
-	// left
-	else {
-		m = i;
-		n = j-1;
+  m = i+1;
+  n = j+1;
+  console.log("enter down right.", m);
+  if (m<size && n<size) {
+   while (curr[m][n]==oid && m<size-1 && n<size-1) {
+    m++;
+    n++;
+   }
+  }
+  if ((m==i+1 && n==j+1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // down
+ else if (dir == DOWN) {
+  m = i+1;
+  n = j;
+  if (m < size-1) {
+   while (curr[m][n]==oid && m<size-1) {
+    m++;
+   }
+  }
+  if ((m==i+1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // down-left
+ else if (dir == DOWN_LEFT) {
+  m = i+1;
+  n = j-1;
+  if (m < size && n >= 0) {
+   while (curr[m][n]==oid && m<size-1 && n>0) {
+    m++;
+    n--;
+   }
+  }
+  // while (curr[m][n]==oid && m<size-1 && n>0) {
+  //  m++;
+  //  n--;
+  // }
+  if ((m==i+1 && n==j-1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
+ // left
+ else {
+  m = i;
+  n = j-1;
 
-		if (n>=0) {
-			while (curr[m][n]==oid && n>0) {
-				n--;
-			}
-		}
-		// while (curr[m][n]==oid && n>0) {
-		// 	n--;
-		// }
-		if (n==j-1) {
-			m = null;
-			n = null;
-		}
-	}
+  if (n>=0) {
+   while (curr[m][n]==oid && n>0) {
+    n--;
+   }
+  }
+  // while (curr[m][n]==oid && n>0) {
+  //  n--;
+  // }
+  if ((n==j-1) || curr[m][n]!=0) {
+   m = null;
+   n = null;
+  }
+ }
 
-	if (m!=null && n!=null)	return [m,n];
-	else return [];
+ if (m!=null && n!=null) return [m,n];
+ else return [];
 }
 
 
@@ -237,8 +237,8 @@ export function nextAvailables (curr, pid) { // curr: current board; pid: player
 
  if (curr[size-1][0] == pid) {
   let pos1 = searchPos(curr, [size-1,0], RIGHT);
-  let pos2 = searchPos(curr, [size-1,0], DOWN);
-  let pos3 = searchPos(curr, [size-1,0], DOWN_RIGHT);
+  let pos2 = searchPos(curr, [size-1,0], TOP);
+  let pos3 = searchPos(curr, [size-1,0], TOP_RIGHT);
   if (pos1.length!=0) {
    pos1.push(size-1);
    pos1.push(0);

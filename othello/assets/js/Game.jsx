@@ -35,12 +35,35 @@ class Game extends Component {
       player1: "",
       player2: "",
       opaque: -1,
-      info:[]
+
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
          .receive("error", resp => { console.log("Unable to join", resp) });
-    this.channel.on("chess", this.setState.bind(this))
+    this.channel.on("chess", state => this.funcA(state))
+  }
+
+  funcA (state) {
+    console.log(state.availables)
+    if (state.availables.length==0) {
+      console.log("CAN NOT MOVE!")
+      // let move = [Math.floor(index/8), index%8];
+      let tiles = this.state.tiles;
+      let board = list2Arr(tiles, SIZE);
+      let currAvailables = state.availables;
+
+      let pid = (state.current==1)?1:2;
+      let oid = (state.current==1)?2:1;
+      // let nextB = nextBoard(board, move, currAvailables, pid);
+      let nextA = nextAvailables(board, oid);
+      let nextTiles = arr2List(board, SIZE)
+
+      let newState = {current: oid, availables: nextA}
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => {})
+
+    }
+    else this.setState(state);
   }
 
   gotView(view) {
@@ -58,7 +81,10 @@ class Game extends Component {
           <Col lg="4">
             <Menu current={this.state.current} player1={this.state.player1}
                player2={this.state.player2} blackScore={this.state.blackScore}
-               whiteScore={this.state.whiteScore} info={this.state.info}/>
+               whiteScore={this.state.whiteScore}
+               pickWhite={this.pickWhite.bind(this)}
+               pickBlack={this.pickBlack.bind(this)}
+               observe={this.observe.bind(this)} />
           </Col>
         </Row>
       </Container>
@@ -76,7 +102,7 @@ class Game extends Component {
             opaque={this.state.opaque}
             clickTile={this.clickTile.bind(this)}
             onEnterChange={this.onEnterChange.bind(this)}
-            onLeaveChange={this.onLeaveChange.bind(this)} />
+            onLeaveChange={this.onLeaveChange.bind(this)}/>
         )}
       </Row>
       </div>
@@ -84,6 +110,7 @@ class Game extends Component {
   }
 
   clickTile(index) {
+    if (!this.validClick(index)) return;
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
@@ -94,14 +121,6 @@ class Game extends Component {
     let nextB = nextBoard(board, move, currAvailables, pid);
     let nextA = nextAvailables(nextB, oid);
     let nextTiles = arr2List(nextB, SIZE)
-    if (currAvailables.length == 0) {
-      console.log("CAN NOT MOVE!!!")
-      let newState = {current: oid, availables: nextA}
-      this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => {})
-        return;
-    }
-    if (!this.validClick(index)) return;
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
       let whiteScore = getScore(nextB, oid)
@@ -120,7 +139,7 @@ class Game extends Component {
   }
   //check if the tile can be clicked
   validClick(index) {
-    if (this.state.player2 == "") {
+    if (this.state.player2 == "" || this.state.player1 == "") {
       alert("You need to wait another player")
       return false;
     }
@@ -144,5 +163,63 @@ class Game extends Component {
   }
   onLeaveChange(index) {
     this.setState({opaque: -1});
+  }
+
+  pickWhite() {
+    if (this.state.player2 != "" && this.state.player2 != play_cfg.user) {
+        alert("White has been picked by another user!")
+        return;
+    }
+    let newState = this.state
+    newState['player2'] = play_cfg.user
+    if (play_cfg.user == this.state.player1) {
+      newState['player1'] = ""
+    }
+    $('.pick-white').removeClass('btn-primary').addClass('btn-warning');
+    $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
+    $('.pick-observer').removeClass('btn-warning').addClass('btn-primary');
+    console.log("Pick White")
+    this.channel.push("chess", {"state": newState})
+      .receive("ok", (resp) => {})
+  }
+  pickBlack() {
+    if (this.state.player1 != "" && this.state.player1 != play_cfg.user) {
+        alert("Black has been picked by another user!")
+        return;
+    }
+    let newState = this.state
+    newState['player1'] = play_cfg.user
+    if (play_cfg.user == this.state.player2) {
+      newState['player2'] = ""
+    }
+    $('.pick-black').removeClass('btn-primary').addClass('btn-warning');
+    $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
+    $('.pick-observer').removeClass('btn-warning').addClass('btn-primary');
+    console.log("Pick Black")
+    this.channel.push("chess", {"state": newState})
+      .receive("ok", (resp) => {})
+  }
+  observe() {
+    console.log("observe")
+    if (this.state.player1 == play_cfg.user) {
+      let newState = this.state
+      newState['player1'] = ""
+      $('.pick-observer').removeClass('btn-primary').addClass('btn-warning');
+      $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
+      $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => {})
+    } else if (this.state.player2 == play_cfg.user) {
+      let newState = this.state
+      newState['player2'] = ""
+      $('.pick-observer').removeClass('btn-primary').addClass('btn-warning');
+      $('.pick-black').removeClass('btn-warning').addClass('btn-primary');
+      $('.pick-white').removeClass('btn-warning').addClass('btn-primary');
+      console.log("newState:", newState);
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => {})
+    } else {
+      return;
+    }
   }
 }

@@ -35,6 +35,8 @@ defmodule OthelloWeb.GameController do
   end
 
   def join(conn, %{"join_data" => join}) do
+
+    
     game = Game.join(join["game"], join["user"])
     conn
     |> put_session(:user, join["user"])
