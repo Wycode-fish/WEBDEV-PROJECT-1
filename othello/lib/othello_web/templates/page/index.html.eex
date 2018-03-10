@@ -1,24 +1,73 @@
+<script>
+  // let selected = $('#banner').val();
+
+  function createRoom () {
+    $(".create-room-btn").hide();
+    $(".join-room-btn").hide();
+    $(".form-join").hide();
+    $(".form-create").show();
+  }
+
+  function joinRoom () {
+    $(".create-room-btn").hide();
+    $(".join-room-btn").hide();
+    $(".form-create").hide();
+    $(".form-join").show();
+  }
+
+  function refresh () {
+    location.reload();
+  }
+  // window.edit_start = function(block_id) {
+  //   $("#edit-block").append("<div class='row'>"
+  //   + "<div class='col-9'><label for='start-time-input'>Input start Time (Your input must follow YYYY-MM-DDTHH:MM:SS, Like: 2018-01-01T03:24:00)</label>"
+  //   +"<input type='text' id='start-time-input' class='form-control'></div>"
+  //   + "<div class='col-3'><button class='btn btn-primary btn-lg' onclick='update_start(" + block_id + ")'>Change</button><button class='btn btn-secondary btn-lg' onclick='location.reload()'>Cancel</button></div>"
+  //   + "</div>")
+  // }
+
+  // console.log(selected);
+</script>
 <div class="index-page container">
   <h1>Welcome to Othello</h1>
 
-  <h2>Join a Game</h2>
+  <h2 id="banner">Join a Game</h2>
+  <button class="create-room-btn btn btn-primary" onclick="createRoom()">Create</button>
+  <button class="join-room-btn btn btn-primary" onclick="joinRoom()"> Join </button>
+  <div class="form-join">
+    <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
+    <div class="form-group">
+      <%= label(f, :user, "Your Name") %>
+      <%= text_input(f, :user, class: "form-control") %>
+    </div>
+    <div class="form-group">
+        Available Play Rooms:
+        <%= select(f, :game, @rooms, prompt: "Choose your room", class: "form-control") %>
+        <br>
+      </div>
+    <%= submit "Join", class: "btn btn-primary" %>
+    <% end %>
+    <br>
+    <button class="btn btn-primary" onclick="refresh()"> Return </button>
+  </div>
 
-  <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
-  <div class="form-group">
-    <%= label(f, :user, "Your Name") %>
-    <%= text_input(f, :user, class: "form-control") %>
-  </div>
-  <div class="form-group">
-    <%= label(f, :game, "Game Name") %>
-    <%= text_input(f, :game, class: "form-control") %>
-  </div>
-  <div class="form-group">
-      Available Play Rooms:
-      <%= select(f, :room, @rooms, prompt: "Choose your room", class: "form-control") %>
-      <br>
-  </div>
-  <%= submit "Join", class: "btn btn-primary" %>
-  <% end %>
+  <div class="form-create">
+    <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
+    <div class="form-group">
+      <%= label(f, :user, "Your Name") %>
+      <%= text_input(f, :user, class: "form-control") %>
+    </div>
 
+    <div class="form-group">
+      <%= label(f, :game, "Game Room No.") %>
+      <%= text_input(f, :game, class: "form-control") %>
+    </div>
+
+    <br>
+    <%= submit "Create", class: "btn btn-primary" %>
+    <% end %>
+    <br>
+    <button class="btn btn-primary" onclick="refresh()"> Return </button>
+  </div>
 
 </div>

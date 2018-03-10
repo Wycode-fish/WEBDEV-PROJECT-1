@@ -19,8 +19,33 @@ defmodule Othello.Game do
   end
 
   def get_rooms do
-    Agent.get(__MODULE__, &(&1))
-    |> Map.keys
+    room_name_list = Agent.get(__MODULE__, &(&1))
+                      |> Map.keys
+    list_to_key_value_pair(room_name_list);
+  end
+
+  def get_available_rooms do
+    all_rooms = Agent.get(__MODULE__, &(&1))|>Map.values();
+    available_rooms = Enum.filter(all_rooms, fn(x) -> x|>Map.get(:state)|>Map.get("player2") == "" end)
+    room_name_list = Enum.map(available_rooms, &(Map.get(&1,:name)))
+    # IO.puts "^^^^^^^^^^^^^^^^^"
+    # IO.inspect list_to_key_value_pair(room_name_list);
+    list_to_key_value_pair(room_name_list);
+  end
+
+  def get_busy_rooms do
+    all_rooms = Agent.get(__MODULE__, &(&1))|>Map.values();
+    available_rooms = Enum.filter(all_rooms, fn(x) -> x|>Map.get(:state)|>Map.get("player2") != "" end)
+    room_name_list = Enum.map(available_rooms, &(Map.get(&1,:name)))
+    # IO.puts "^^^^^^^^^^^^^^^^^"
+    # IO.inspect list_to_key_value_pair(room_name_list);
+    list_to_key_value_pair(room_name_list);
+  end
+
+  def list_to_key_value_pair(lst) do
+    lst = lst|>Enum.map(fn(x) -> {x, x} end);
+    map = for {key, val} <- lst, into: %{}, do: {String.to_atom(key), val}
+    map|>Map.to_list();
   end
 
   def join(gname, user) do

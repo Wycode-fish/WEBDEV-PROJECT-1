@@ -44,26 +44,75 @@ class Game extends Component {
   }
 
   funcA (state) {
-    console.log(state.availables)
-    if (state.availables.length==0) {
-      console.log("CAN NOT MOVE!")
-      // let move = [Math.floor(index/8), index%8];
-      let tiles = this.state.tiles;
-      let board = list2Arr(tiles, SIZE);
-      let currAvailables = state.availables;
+    this.setState(state, () => {
+      if (state.availables.length==0) {
+        console.log("CAN NOT MOVE!")
+        if (this.state.blackScore + this.state.whiteScore == 64) {
+          this.checkWin();
+          return;
+        }
+        // let move = [Math.floor(index/8), index%8];
+        let tiles = this.state.tiles;
+        let board = list2Arr(tiles, SIZE);
+        let currAvailables = state.availables;
+        let pid = (state.current==1)?1:2;
+        let oid = (state.current==1)?2:1;
+        // let nextB = nextBoard(board, move, currAvailables, pid);
+        let nextA = nextAvailables(board, oid);
+        if (nextA.length == 0) {
+          this.checkWin();
+          return;
+        }
+        let nextTiles = arr2List(board, SIZE)
 
-      let pid = (state.current==1)?1:2;
-      let oid = (state.current==1)?2:1;
-      // let nextB = nextBoard(board, move, currAvailables, pid);
-      let nextA = nextAvailables(board, oid);
-      let nextTiles = arr2List(board, SIZE)
+        // let newState = {current: oid, availables: nextA}
+        let newState = this.state
+        newState['current'] = oid
+        newState['availables'] = nextA
+        this.channel.push("chess", {"state": newState})
+          .receive("ok", (resp) => {})
+      }
+    })
+  }
 
-      let newState = {current: oid, availables: nextA}
-      this.channel.push("chess", {"state": newState})
-        .receive("ok", (resp) => {})
-
-    }
-    else this.setState(state);
+  checkWin() {
+      if (this.state.blackScore > this.state.whiteScore) {
+        alert("Black Win!!!")
+      } else if (this.state.blackScore < this.state.whiteScore) {
+        alert("White Win!!!")
+      } else {
+        atert("Tie!!!")
+      }
+      if (confirm("Play Again ?")) {
+        // let newState = {
+        //   availables: [ [5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3] ],
+        //   tiles: [0,0,0,0,0,0,0,0,
+        //           0,0,0,0,0,0,0,0,
+        //           0,0,0,0,0,0,0,0,
+        //           0,0,0,2,1,0,0,0,
+        //           0,0,0,1,2,0,0,0,
+        //           0,0,0,0,0,0,0,0,
+        //           0,0,0,0,0,0,0,0,
+        //           0,0,0,0,0,0,0,0],
+        //   current: 1,
+        //   blackScore: 2,
+        //   whiteScore: 2
+        // }
+        let newState = this.state
+        newState['tiles'] = [0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,2,1,0,0,0,
+                0,0,0,1,2,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0];
+        newState['current'] = 1;
+        newState['blackScore'] = 2;
+        newState['whiteScore'] = 2;
+        this.channel.push("chess", {"state": newState})
+          .receive("ok", (resp) => {})
+      }
   }
 
   gotView(view) {
@@ -124,7 +173,10 @@ class Game extends Component {
     if (pid == 1) {
       let blackScore = getScore(nextB, pid)
       let whiteScore = getScore(nextB, oid)
-      let newState = {current: 2, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
+      let newState = {current: 2, blackScore: blackScore,
+                      whiteScore: whiteScore, tiles: nextTiles,
+                      availables: nextA, player1: this.state.player1,
+                      player2: this.state.player2}
       this.channel.push("chess", {"state": newState})
         .receive("ok", (resp) => {})
 
@@ -132,7 +184,10 @@ class Game extends Component {
     } else {
       let blackScore = getScore(nextB, oid)
       let whiteScore = getScore(nextB, pid)
-      let newState = {current: 1, blackScore: blackScore, whiteScore: whiteScore, tiles: nextTiles, availables: nextA}
+      let newState = {current: 1, blackScore: blackScore,
+                      whiteScore: whiteScore, tiles: nextTiles,
+                      availables: nextA, player1: this.state.player1,
+                      player2: this.state.player2}
       this.channel.push("chess", {"state": newState})
         .receive("ok", (resp) => {})
     }

@@ -36,11 +36,29 @@ defmodule OthelloWeb.GameController do
 
   def join(conn, %{"join_data" => join}) do
 
-    
-    game = Game.join(join["game"], join["user"])
-    conn
-    |> put_session(:user, join["user"])
-    |> redirect(to: "/g/" <> join["game"])
+    available_rooms = Game.get_available_rooms()
+    busy_rooms = Game.get_busy_rooms();
+
+    IO.puts "@@@@@@@@@@@@"
+    IO.inspect join;
+    game_name = join["game"];
+    game_user = join["user"];
+
+    user_valid = String.length(game_user)!=0;
+    game_valid = String.length(game_name)!=0;
+
+    valid = user_valid and game_valid;
+
+
+    if valid do
+      game = Game.join(join["game"], join["user"]);
+      conn
+      |> put_session(:user, join["user"])
+      |> redirect(to: "/g/" <> join["game"])
+    else
+      conn|>put_flash(:error, "form information incomplete.")
+      |>redirect(to: "/");
+    end
   end
 
 
