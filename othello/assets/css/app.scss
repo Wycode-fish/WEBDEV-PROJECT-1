@@ -80,11 +80,11 @@ body {
 }
 
 .form-join {
-  display: none;
+  // display: none;
 }
 
 .form-create {
-  display: none;
+  // display: none;
 }
 
 .create-room-btn {
@@ -92,7 +92,7 @@ body {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .active {

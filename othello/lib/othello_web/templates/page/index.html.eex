@@ -1,39 +1,12 @@
-<script>
-  // let selected = $('#banner').val();
 
-  function createRoom () {
-    $(".create-room-btn").hide();
-    $(".join-room-btn").hide();
-    $(".form-join").hide();
-    $(".form-create").show();
-  }
-
-  function joinRoom () {
-    $(".create-room-btn").hide();
-    $(".join-room-btn").hide();
-    $(".form-create").hide();
-    $(".form-join").show();
-  }
-
-  function refresh () {
-    location.reload();
-  }
-  // window.edit_start = function(block_id) {
-  //   $("#edit-block").append("<div class='row'>"
-  //   + "<div class='col-9'><label for='start-time-input'>Input start Time (Your input must follow YYYY-MM-DDTHH:MM:SS, Like: 2018-01-01T03:24:00)</label>"
-  //   +"<input type='text' id='start-time-input' class='form-control'></div>"
-  //   + "<div class='col-3'><button class='btn btn-primary btn-lg' onclick='update_start(" + block_id + ")'>Change</button><button class='btn btn-secondary btn-lg' onclick='location.reload()'>Cancel</button></div>"
-  //   + "</div>")
-  // }
-
-  // console.log(selected);
-</script>
 <div class="index-page container">
   <h1>Welcome to Othello</h1>
 
-  <h2 id="banner">Join a Game</h2>
+  <h2 class="banner">Join a Game</h2>
   <button class="create-room-btn btn btn-primary" onclick="createRoom()">Create</button>
   <button class="join-room-btn btn btn-primary" onclick="joinRoom()"> Join </button>
+
+
   <div class="form-join">
     <%= form_for @conn, "/games/join", [as: :join_data], fn f -> %>
     <div class="form-group">
@@ -71,3 +44,37 @@
   </div>
 
 </div>
+
+
+<script>
+  // let selected = $('#banner').val();
+  
+  $(".form-join").hide();
+  $(".form-create").hide();
+  function createRoom () {
+    $(".create-room-btn").hide();
+    $(".join-room-btn").hide();
+    $(".form-join").hide();
+    $(".form-create").show();
+  }
+
+  function joinRoom () {
+    $(".create-room-btn").hide();
+    $(".join-room-btn").hide();
+    $(".form-create").hide();
+    $(".form-join").show();
+  }
+
+  function refresh () {
+    location.reload();
+  }
+  // window.edit_start = function(block_id) {
+  //   $("#edit-block").append("<div class='row'>"
+  //   + "<div class='col-9'><label for='start-time-input'>Input start Time (Your input must follow YYYY-MM-DDTHH:MM:SS, Like: 2018-01-01T03:24:00)</label>"
+  //   +"<input type='text' id='start-time-input' class='form-control'></div>"
+  //   + "<div class='col-3'><button class='btn btn-primary btn-lg' onclick='update_start(" + block_id + ")'>Change</button><button class='btn btn-secondary btn-lg' onclick='location.reload()'>Cancel</button></div>"
+  //   + "</div>")
+  // }
+
+  // console.log(selected);
+</script>

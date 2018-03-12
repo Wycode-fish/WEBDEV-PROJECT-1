@@ -92,7 +92,7 @@ class Game extends Component {
       res = res+" BlackScore:"+this.state.blackScore+" WhiteScore:"+this.state.whiteScore;
       return res;
     }
-    
+
   gotView(view) {
     this.channel.push("chess", {"state": view.game.state})
         .receive("ok", (resp) => console.log("resp", resp))
@@ -131,8 +131,8 @@ class Game extends Component {
     <div className="container-container">
       <Container>
         <Row>
-          <Col lg="8">{this.renderTiles(this.state.tiles)}</Col>
-          <Col lg="4">
+          <Col xs="12" lg="8">{this.renderTiles(this.state.tiles)}</Col>
+          <Col xs="12" lg="4">
             <Menu current={this.state.current} player1={this.state.player1}
                player2={this.state.player2} blackScore={this.state.blackScore}
                whiteScore={this.state.whiteScore}
@@ -155,18 +155,6 @@ class Game extends Component {
         </Modal>
       </div>
     </div>
-    // <div>
-    //   <Modal isOpen={this.isEnd} className={this.props.className}>
-    //     <ModalHeader>Modal title</ModalHeader>
-    //     <ModalBody>
-    //
-    //     </ModalBody>
-    //     <ModalFooter>
-    //       <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-    //       <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-    //     </ModalFooter>
-    //   </Modal>
-    // </div>
     )
   }
 
