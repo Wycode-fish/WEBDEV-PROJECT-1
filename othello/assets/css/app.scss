@@ -1,0 +1,100 @@
+/* This file is for your main application css. */
+@import "bootstrap";
+
+
+.banner {
+  background-image: url("../../images/banner.jpg");
+  font-family: "Gill Sans", sans-serif;
+  border-radius: 10px;
+  height: 15%;
+  padding: 10px;
+  margin: 20px;
+}
+.banner p {
+  font-size: 20px;
+  color: white;
+}
+
+.parent{
+  width: 12.5%;
+}
+.tile {
+  width: 100%;
+  padding-bottom: 92%;
+  height: 0;
+  border-style: solid;
+  border-width: 3px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+}
+
+.index-page{
+  text-align: center;
+  width: 40%;
+  padding-top:100px;
+}
+
+.tile-panel {
+  padding: 0;
+}
+
+.scores {
+  font-family: "Gill Sans", sans-serif;
+  background-image: url("../../images/board.jpg");
+  background-position: center;
+  padding-top: 50px;
+  height:100%;
+  border-radius: 10px;
+}
+
+.row {
+  margin:0px;
+}
+
+.blackOpaqueClass:hover {
+  background-image: url("../../images/black2.jpg");
+}
+
+.whiteOpaqueClass:hover {
+  background-image: url("../../images/white2.jpg");
+}
+
+.container-container {
+  margin-left: 0;
+  padding: -1px;
+}
+body {
+  background-image: url("../../images/bg.jpg");
+}
+.index-page{
+  text-align: center;
+  width: 40%;
+  padding-top:100px;
+}
+.game-title{
+    padding-left: 25px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.form-join {
+  display: none !important;
+}
+
+.form-create {
+  display: none !important;
+}
+
+.create-room-btn {
+  margin-right: 30px;
+}
+
+.hide {
+  display: none;
+}
+
+.active {
+  display: block;
+}
