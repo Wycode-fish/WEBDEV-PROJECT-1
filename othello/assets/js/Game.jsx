@@ -34,7 +34,8 @@ class Game extends Component {
       player1: "",
       player2: "",
       opaque: -1,
-      end: false
+      end: false,
+      noMove: ""
     }
     this.channel.join()
          .receive("ok", this.gotView.bind(this))
@@ -49,7 +50,6 @@ class Game extends Component {
       }
       else {
         if (state.availables.length==0) {
-          console.log("CAN NOT MOVE!")
           // let move = [Math.floor(index/8), index%8];
           let tiles = this.state.tiles;
           let board = list2Arr(tiles, SIZE);
@@ -58,22 +58,30 @@ class Game extends Component {
           let oid = (state.current==1)?2:1;
           // let nextB = nextBoard(board, move, currAvailables, pid);
           let nextA = nextAvailables(board, oid);
+          let newState = this.state
+          if (pid==1) newState['noMove'] = this.state.player1;
+          else newState['noMove'] = this.state.player2;
+          // newState['noMove'] = (pid==1)?this.state.player2:this.state.player1;
+          console.log("enenen", newState['noMove'])
           if (nextA.length == 0) {
-            let newState = this.state
             newState['end'] = true;
             this.channel.push("chess", {"state": newState})
               .receive("ok", (resp) => {})
             return;
           }
 
+
           let nextTiles = arr2List(board, SIZE)
 
           // let newState = {current: oid, availables: nextA}
-          let newState = this.state
           newState['current'] = oid
           newState['availables'] = nextA
           this.channel.push("chess", {"state": newState})
             .receive("ok", (resp) => {})
+        }
+        else if (state.noMove != "") {
+          console.log("before settime", state.noMove)
+          setTimeout(() => { this.setState({noMove: ""}) }, 3000);
         }
       }
     })
@@ -125,38 +133,52 @@ class Game extends Component {
      window.location = '/';
    }
 
-  render() {
-    let res = this.getRes();
-    return (
-    <div className="container-container">
-      <Container>
-        <Row>
-          <Col xs="12" lg="8">{this.renderTiles(this.state.tiles)}</Col>
-          <Col xs="12" lg="4">
-            <Menu current={this.state.current} player1={this.state.player1}
-               player2={this.state.player2} blackScore={this.state.blackScore}
-               whiteScore={this.state.whiteScore}
-               pickWhite={this.pickWhite.bind(this)}
-               pickBlack={this.pickBlack.bind(this)}
-               observe={this.observe.bind(this)} />
-          </Col>
-        </Row>
-      </Container>
-      <div>
-        <Modal isOpen={this.state.end}>
-        <ModalHeader>Game Over</ModalHeader>
-          <ModalBody>
-            {res}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.game_again.bind(this)}>Again</Button>{' '}
-            <Button color="secondary" onClick={this.leave_room}>Leave</Button>
-          </ModalFooter>
-        </Modal>
-      </div>
-    </div>
-    )
-  }
+ render() {
+     console.log("state", this.state)
+     let res = this.getRes();
+     let noMove = this.state.noMove;
+     console.log("hahafh", noMove);
+     return (
+     <div className="container-container">
+       <Container>
+         <Row>
+           <Col xs="12" lg="8">{this.renderTiles(this.state.tiles)}</Col>
+           <Col xs="12" lg="4">
+             <Menu current={this.state.current} player1={this.state.player1}
+                player2={this.state.player2} blackScore={this.state.blackScore}
+                whiteScore={this.state.whiteScore}
+                pickWhite={this.pickWhite.bind(this)}
+                pickBlack={this.pickBlack.bind(this)}
+                observe={this.observe.bind(this)} />
+           </Col>
+         </Row>
+       </Container>
+       <div>
+         <Modal isOpen={this.state.end}>
+         <ModalHeader>Game Over</ModalHeader>
+           <ModalBody>
+             {res}
+           </ModalBody>
+           <ModalFooter>
+             <Button color="primary" onClick={this.game_again.bind(this)}>Again</Button>{' '}
+             <Button color="secondary" onClick={this.leave_room}>Leave</Button>
+           </ModalFooter>
+         </Modal>
+       </div>
+       <div>
+         <Modal isOpen={noMove != ""}>
+           <ModalHeader>Oops!</ModalHeader>
+           <ModalBody>
+             {noMove} Do Not Have Available Move!
+           </ModalBody>
+           <ModalFooter>
+           </ModalFooter>
+         </Modal>
+
+       </div>
+     </div>
+     )
+   }
 
   renderTiles(tiles) {
     return(
