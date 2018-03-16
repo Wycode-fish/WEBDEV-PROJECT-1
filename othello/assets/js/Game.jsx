@@ -43,6 +43,16 @@ class Game extends Component {
     this.channel.on("chess", state => this.funcA(state))
   }
 
+  componentDidUpdate() {
+    console.log("DIDUPDATE")
+    if (this.state.current == 2) {
+       console.log("render start!!!")
+       this.render();
+       console.log("render end!!!")
+       this.aiPlay();
+    }
+  }
+
   componentWillMount() {
     if (window.ai) {
       console.log("AI MODLE")
@@ -106,7 +116,6 @@ class Game extends Component {
             .receive("ok", (resp) => {})
         }
         else if (state.noMove != "") {
-          console.log("before settime", state.noMove)
           setTimeout(() => { this.setState({noMove: ""}) }, 3000);
         }
       }
@@ -134,33 +143,55 @@ class Game extends Component {
   }
 
   game_again(){
-    let newState = this.state
-    newState['tiles'] = [0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            0,0,0,2,1,0,0,0,
-            0,0,0,1,2,0,0,0,
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0];
-    newState['current'] = 1;
-    newState['player1'] = "";
-    newState['player2'] = "";
-    newState['blackScore'] = 2;
-    newState['whiteScore'] = 2;
-    newState['end'] = false;
-    newState['availables'] = [[5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3]];
-    this.channel.push("chess", {"state": newState})
-      .receive("ok", (resp) => {})
-   this.setState(newState);
-    // window.location = '/g/' + "<%= @game %>";
+    if (window.ai = true) {
+      let newState = {
+        tiles: [0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,2,1,0,0,0,
+                0,0,0,1,2,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0],
+        availables: [[5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3]],
+        current: 1,
+        blackScore: 2,
+        whiteScore: 2,
+        player1: "You",
+        player2: "Computer",
+        opaque: -1,
+        end: false,
+        noMove: ""
+      }
+      this.setState(newState)
+    } else {
+      let newState = this.state
+      newState['tiles'] = [0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,
+              0,0,0,2,1,0,0,0,
+              0,0,0,1,2,0,0,0,
+              0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0,
+              0,0,0,0,0,0,0,0];
+      newState['current'] = 1;
+      newState['player1'] = "";
+      newState['player2'] = "";
+      newState['blackScore'] = 2;
+      newState['whiteScore'] = 2;
+      newState['end'] = false;
+      newState['availables'] = [[5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3]];
+      this.channel.push("chess", {"state": newState})
+        .receive("ok", (resp) => {})
+     this.setState(newState);
+    }
   }
 
   leave_room(){
      window.location = '/';
    }
 
- render() {
+   render() {
      console.log("state", this.state)
      let res = this.getRes();
      let noMove = this.state.noMove;
@@ -196,16 +227,21 @@ class Game extends Component {
          <Modal isOpen={noMove != ""}>
            <ModalHeader>Oops!</ModalHeader>
            <ModalBody>
-             {noMove} Do Not Have Available Move!
+             {noMove} Does Not Have Available Move!
            </ModalBody>
            <ModalFooter>
+             <Button color="primary" onClick={this.continueGame.bind(this)}>Ok</Button>
            </ModalFooter>
          </Modal>
 
        </div>
      </div>
      )
-   }
+    }
+
+  continueGame() {
+    this.setState({noMove: ""})
+  }
 
   renderTiles(tiles) {
     return(
@@ -225,11 +261,11 @@ class Game extends Component {
   }
 
   clickTile(index) {
-    if (!this.validClick(index)) return;
     if (window.ai) {
       this.clickInAi(index);
       return;
     }
+    if (!this.validClick(index)) return;
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
@@ -263,6 +299,7 @@ class Game extends Component {
   }
 
   clickInAi(index) {
+    if (!this.validClick(index)) return;
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
@@ -275,12 +312,25 @@ class Game extends Component {
     let newState = {current: 2, blackScore: blackScore,
                     whiteScore: whiteScore, tiles: nextTiles,
                     availables: nextA};
-    console.log("rerender")
-    this.setState(newState, this.aiPlay.bind(this))
-}
+    if (nextA.length == 0) {
+      newState['current'] = 1;
+      nextA = nextAvailables(nextB, 1);
+      if (nextA.length == 0) {
+        console.log("END$$$$$$$")
+        this.setState({end: true})
+      } else {
+        console.log("YOU NOMOVE")
+        newState['availables']= nextA;
+        newState['noMove'] = "Computer";
+        this.setState(newState)
+      }
+    } else {
+        this.setState(newState)
+    }
+
+  }
 
   aiPlay() {
-
     let board = list2Arr(this.state.tiles, SIZE);
     console.log("ALGO START")
     let move = minMaxDecision(board, 2);
@@ -294,7 +344,23 @@ class Game extends Component {
     let newState = {current: 1, blackScore: blackScore,
                     whiteScore: whiteScore, tiles: nextTiles,
                     availables: nextA};
-    this.setState(newState);
+    console.log("state before length = 0", newState)
+    if (nextA.length == 0) {
+      newState['current'] = 2;
+      nextA = nextAvailables(nextB, 2);
+      if (nextA.length == 0) {
+        console.log("END88**********")
+        this.setState({end: true})
+      } else {
+        newState['availables']= nextA;
+        newState['noMove'] = "You";
+        console.log("state after length = 0", newState)
+        console.log("COMPUTER NOMOVE")
+        this.setState(newState)
+      }
+    } else {
+        this.setState(newState);
+    }
   }
 
 

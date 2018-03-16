@@ -748,7 +748,7 @@ export function list2Arr (lst, size) {
 }
 
 
-function minMax(currBoard, currPlayer, oriPlayer, currLayer) {
+function minMax(currBoard, currPlayer, oriPlayer, currLayer, alpha, beta) {
 
  let oppnent = (currPlayer==1)?2:1;
 
@@ -775,22 +775,24 @@ function minMax(currBoard, currPlayer, oriPlayer, currLayer) {
 
    let newBoard = nextBoard(currBoard, currMove, moveList, currPlayer);
 
-   let val = minMax(newBoard, oppnent, oriPlayer, currLayer + 1);
+   let val = minMax(newBoard, oppnent, oriPlayer, currLayer + 1, alpha, beta);
 
    if (currPlayer == oriPlayer) {
 
-    if (val > maxVal) {
+    maxVal = (val > maxVal)?val:maxVal;
 
-     maxVal = val;
-    }
+    alpha = (maxVal > alpha)?maxVal:alpha;
+
+    if (alpha >= beta) return maxVal;
+
    }
    else {
 
-    if (val < maxVal) {
+    maxVal = (val < maxVal)?val:maxVal;
 
-     maxVal = val;
+    beta = (maxVal < beta)?maxVal:beta;
 
-    }
+    if (alpha >= beta) return maxVal;
    }
 
   }
@@ -827,7 +829,7 @@ export function minMaxDecision(currBoard, currPlayer) {
 
    let newBoard = nextBoard(currBoard, currMove, moveList, currPlayer);
 
-   let val = minMax(newBoard, oppnent, currPlayer, 1);
+   let val = minMax(newBoard, oppnent, currPlayer, 1, -100, 100);
 
    if (val>max) {
 
