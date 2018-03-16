@@ -44,8 +44,7 @@ class Game extends Component {
   }
 
   componentDidUpdate() {
-    console.log("DIDUPDATE")
-    if (!this.state.end && this.state.current == 2) {
+    if (window.ai && !this.state.end && this.state.current == 2) {
        console.log("render start!!!")
        this.render();
        console.log("render end!!!")
