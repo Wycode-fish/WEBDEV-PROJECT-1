@@ -45,7 +45,7 @@ class Game extends Component {
 
   componentDidUpdate() {
     console.log("DIDUPDATE")
-    if (this.state.current == 2) {
+    if (!this.state.end && this.state.current == 2) {
        console.log("render start!!!")
        this.render();
        console.log("render end!!!")
@@ -332,9 +332,7 @@ class Game extends Component {
 
   aiPlay() {
     let board = list2Arr(this.state.tiles, SIZE);
-    console.log("ALGO START")
     let move = minMaxDecision(board, 2);
-    console.log("ALGO END")
     let currAvailables = this.state.availables;
     let nextB = nextBoard(board, move, currAvailables, 2);
     let nextA = nextAvailables(nextB, 1);
@@ -353,9 +351,7 @@ class Game extends Component {
         this.setState({end: true})
       } else {
         newState['availables']= nextA;
-        newState['noMove'] = "You";
         console.log("state after length = 0", newState)
-        console.log("COMPUTER NOMOVE")
         this.setState(newState)
       }
     } else {

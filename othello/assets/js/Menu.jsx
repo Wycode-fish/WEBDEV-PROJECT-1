@@ -2,15 +2,28 @@ import React, { Component } from 'react';
 
 export default function(props) {
   const turn = () => {
-    return props.current == 1 ? props.player1 + "'s Turn" : props.player2 + "'s Turn"
+    let ply = props.current == 1 ? props.player1 : props.player2;
+    ply = (ply=="")?"-":ply;
+    return ply;
   }
   // const listInfo = () => {
   //   return (
   //     <div>
-  //       {_.map(props.info, (item, index) => <p key={index}>{item}</p>)}
+  //       {_.map(props.info, (item, index) => <p key={index}>{item}</p >)}
   //     </div>
   //   )
   // }
+
+  const player2 = () => {
+    let player2 = props.player2;
+    return (player2=="")?"None":player2;
+  }
+
+  const player1 = () => {
+    let player1 = props.player1;
+    return (player1=="")?"None":player1;
+  }
+
   const userinfo = () => {
     if (props.player1 == play_cfg.user) {
       return "You Are Black"
@@ -52,10 +65,17 @@ export default function(props) {
   return (
     <div className="scores">
       <h3>{userinfo()}</h3>
-      {threeButton()}
-      <h3>{props.player2}  White: {props.whiteScore}</h3>
-      <h3>{props.player1}  Black: {props.blackScore}</h3>
-      <h3>{turn()}</h3>
+      <br/><br/>
+      <div className="role-pick-btns">{threeButton()}</div>
+      <br/><br/>
+      <div className="score-panel">
+        <div className="score-panel-cnt-white">
+          <p className="sword">{player2()}  &#9898;: {props.whiteScore}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <p className="sword">&#9876;</p>
+          <p>{player1()}  &#9899;: {props.blackScore}&nbsp;&nbsp;&nbsp;&nbsp;</p >
+        </div>
+        <p>Current Player: {turn()}</p >
+      </div>
     </div>
   )
 }
