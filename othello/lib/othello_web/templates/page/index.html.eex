@@ -68,8 +68,22 @@
     <br>
     <button class="btn btn-primary" onclick="refresh()"> Return </button>
   </div>
-
 </div>
+
+<ul class="slideshow">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+
+<!-- <div class="card">
+<div class="card-body">
+  <h5 class="card-title">Card title</h5>
+  <a href="#" class="enter-btn btn btn-primary">Enter Room</a>
+</div>
+</div> -->
 
 
 <script>

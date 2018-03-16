@@ -4,7 +4,7 @@ import { Button, Container, Col, Row, Modal, ModalHeader, ModalBody, ModalFooter
 import _ from 'underscore';
 import Tile from './Tile';
 import Menu from './Menu'
-import { searchPos, nextAvailables, nextBoard, list2Arr, getScore, arr2List } from './logic'
+import { searchPos, nextAvailables, nextBoard, list2Arr, getScore, arr2List, minMaxDecision } from './logic'
 
 // Global Constants
 let TOP_LEFT  = 1;
@@ -41,6 +41,32 @@ class Game extends Component {
          .receive("ok", this.gotView.bind(this))
          .receive("error", resp => { console.log("Unable to join", resp) });
     this.channel.on("chess", state => this.funcA(state))
+  }
+
+  componentWillMount() {
+    if (window.ai) {
+      console.log("AI MODLE")
+      let newState = {
+        tiles: [0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,2,1,0,0,0,
+                0,0,0,1,2,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0],
+        availables: [[5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3]],
+        current: 1,
+        blackScore: 2,
+        whiteScore: 2,
+        player1: "You",
+        player2: "Computer",
+        opaque: -1,
+        end: false,
+        noMove: ""
+      }
+      this.setState(newState)
+    }
   }
 
   funcA (state) {
@@ -123,6 +149,7 @@ class Game extends Component {
     newState['blackScore'] = 2;
     newState['whiteScore'] = 2;
     newState['end'] = false;
+    newState['availables'] = [[5, 4, 3, 4], [3, 2, 3, 4], [2, 3, 4 ,3], [4, 5, 4, 3]];
     this.channel.push("chess", {"state": newState})
       .receive("ok", (resp) => {})
    this.setState(newState);
@@ -199,11 +226,14 @@ class Game extends Component {
 
   clickTile(index) {
     if (!this.validClick(index)) return;
+    if (window.ai) {
+      this.clickInAi(index);
+      return;
+    }
     let move = [Math.floor(index/8), index%8];
     let tiles = this.state.tiles;
     let board = list2Arr(tiles, SIZE);
     let currAvailables = this.state.availables;
-
     let pid = (this.state.current==1)?1:2;
     let oid = (this.state.current==1)?2:1;
     let nextB = nextBoard(board, move, currAvailables, pid);
@@ -232,6 +262,41 @@ class Game extends Component {
     }
   }
 
+  clickInAi(index) {
+    let move = [Math.floor(index/8), index%8];
+    let tiles = this.state.tiles;
+    let board = list2Arr(tiles, SIZE);
+    let currAvailables = this.state.availables;
+    let nextB = nextBoard(board, move, currAvailables, 1);
+    let nextA = nextAvailables(nextB, 2);
+    let nextTiles = arr2List(nextB, SIZE);
+    let blackScore = getScore(nextB, 1)
+    let whiteScore = getScore(nextB, 2)
+    let newState = {current: 2, blackScore: blackScore,
+                    whiteScore: whiteScore, tiles: nextTiles,
+                    availables: nextA};
+    console.log("rerender")
+    this.setState(newState, this.aiPlay.bind(this))
+}
+
+  aiPlay() {
+
+    let board = list2Arr(this.state.tiles, SIZE);
+    console.log("ALGO START")
+    let move = minMaxDecision(board, 2);
+    console.log("ALGO END")
+    let currAvailables = this.state.availables;
+    let nextB = nextBoard(board, move, currAvailables, 2);
+    let nextA = nextAvailables(nextB, 1);
+    let nextTiles = arr2List(nextB, SIZE);
+    let blackScore = getScore(nextB, 1)
+    let whiteScore = getScore(nextB, 2)
+    let newState = {current: 1, blackScore: blackScore,
+                    whiteScore: whiteScore, tiles: nextTiles,
+                    availables: nextA};
+    this.setState(newState);
+  }
+
 
   //check if the tile can be clicked
   validClick(index) {
@@ -240,7 +305,6 @@ class Game extends Component {
       return false;
     }
     let curr = this.state.current;
-
     let curr_name = (curr==1)?this.state.player1:this.state.player2;
     let player = play_cfg.user;
     if (curr_name != player) return false;
@@ -248,9 +312,11 @@ class Game extends Component {
     let x = Math.floor(index / 8)
     let y = index % 8
     let flag = false;
+    console.log("flag", flag)
     this.state.availables.forEach((a) => {
       if (a[0] == x && a[1] == y) flag = true;
     })
+    console.log("flag", flag)
     return flag;
   }
 

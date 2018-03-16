@@ -13,16 +13,6 @@ defmodule OthelloWeb.GameController do
     player2 = Map.get(state, "player2");
     curr = Map.get(state, "current");
 
-    # # curr_player = (curr==1)? player1:player2;
-    # if (curr==1) do
-    #   curr = player1;
-    # else
-    #   curr = player2;
-    # end
-    #
-    # if (curr==user) do
-    #
-    # end
     host = (user == game[:host])
 
     if !is_nil(user) and !is_nil(game) do
@@ -32,6 +22,10 @@ defmodule OthelloWeb.GameController do
       |> put_flash(:error, "Bad user or game chosen")
       |> redirect(to: "/")
     end
+  end
+
+  def ai(conn, _params) do
+    render conn, "ai.html"
   end
 
   def join(conn, %{"join_data" => join}) do

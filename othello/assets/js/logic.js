@@ -96,7 +96,6 @@ export function searchPos (curr, pos, dir) {
 
   m = i+1;
   n = j+1;
-  console.log("enter down right.", m);
   if (m<size && n<size) {
    while (curr[m][n]==oid && m<size-1 && n<size-1) {
     m++;
@@ -748,6 +747,121 @@ export function list2Arr (lst, size) {
 	return arr;
 }
 
+
+function minMax(currBoard, currPlayer, oriPlayer, currLayer) {
+
+ let oppnent = (currPlayer==1)?2:1;
+
+ if (isGameEnd(currBoard, currPlayer) || currLayer == 5) {
+
+  return getScore(currBoard, currPlayer) - getScore(currBoard, oppnent);
+ }
+
+
+ let moveList = nextAvailables(currBoard, currPlayer);
+
+ if (moveList.length<0) {
+
+  return minMax(currBoard, oppnent, oriPlayer, currLayer + 1);
+ }
+ else {
+  let maxVal = (currPlayer==oriPlayer)?0:100;
+
+  for (let i=0; i<moveList.length; i++) {
+
+   let currMove = [moveList[i][0], moveList[i][1]];
+
+   //let temp = tempBoard(currBoard);
+
+   let newBoard = nextBoard(currBoard, currMove, moveList, currPlayer);
+
+   let val = minMax(newBoard, oppnent, oriPlayer, currLayer + 1);
+
+   if (currPlayer == oriPlayer) {
+
+    if (val > maxVal) {
+
+     maxVal = val;
+    }
+   }
+   else {
+
+    if (val < maxVal) {
+
+     maxVal = val;
+
+    }
+   }
+
+  }
+
+  return maxVal;
+ }
+
+ return -1;
+}
+
+
+export function minMaxDecision(currBoard, currPlayer) {
+
+ let oppnent = (currPlayer==1)?2:1;
+
+ let moveList = nextAvailables(currBoard, currPlayer);
+
+ let bestDecision = [];
+
+ if (moveList.length==0) {
+
+  return [-1, -1];
+ }
+
+ else {
+
+  let max = 0;
+
+  bestDecision = [ moveList[0][0], moveList[0][1] ];
+
+  for (let i = 0; i<moveList.length; i++) {
+
+   let currMove = [ moveList[i][0], moveList[i][1] ];
+
+   let newBoard = nextBoard(currBoard, currMove, moveList, currPlayer);
+
+   let val = minMax(newBoard, oppnent, currPlayer, 1);
+
+   if (val>max) {
+
+    max = val;
+
+    bestDecision = currMove;
+   }
+  }
+
+  return bestDecision;
+ }
+
+}
+
+function isGameEnd(board, currPlayer ) {
+
+ let zeroCount = 0;
+
+ for (let i=0; i<board.length; i++) {
+
+  for (let j=0; j<board[0].length; j++) {
+
+   if (board[i][j]==0) {
+    zeroCount++;
+   }
+  }
+ }
+ let boardFull = zeroCount==0;
+
+ let opponent = (currPlayer==1)?2:1;
+ let bothNoMove = nextAvailables(board, currPlayer).length==0 && nextAvailables(board, opponent).length==0;
+
+ return zeroCount==0 || bothNoMove;
+}
 // let lst = [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3];
 // let arr = list2Arr(lst, 4);
 // console.log(arr);
