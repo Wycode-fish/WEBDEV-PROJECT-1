@@ -76,6 +76,7 @@ export default function(props) {
         </div>
         <p>Current Player: {turn()}</p >
       </div>
+      <button onClick={() => props.leave()} className="pick-observer btn btn-md btn-danger">Exit</button>
     </div>
   )
 }

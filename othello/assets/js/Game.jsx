@@ -45,9 +45,6 @@ class Game extends Component {
 
   componentDidUpdate() {
     if (window.ai && !this.state.end && this.state.current == 2) {
-       console.log("render start!!!")
-       this.render();
-       console.log("render end!!!")
        this.aiPlay();
     }
   }
@@ -100,6 +97,7 @@ class Game extends Component {
           console.log("enenen", newState['noMove'])
           if (nextA.length == 0) {
             newState['end'] = true;
+            newState['noMove'] = "";
             this.channel.push("chess", {"state": newState})
               .receive("ok", (resp) => {})
             return;
@@ -206,7 +204,8 @@ class Game extends Component {
                 whiteScore={this.state.whiteScore}
                 pickWhite={this.pickWhite.bind(this)}
                 pickBlack={this.pickBlack.bind(this)}
-                observe={this.observe.bind(this)} />
+                observe={this.observe.bind(this)}
+                leave={this.leave_room.bind(this)} />
            </Col>
          </Row>
        </Container>

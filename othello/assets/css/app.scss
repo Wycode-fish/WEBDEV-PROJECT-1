@@ -48,7 +48,7 @@
 }
 
 .scores p {
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .scores button {
@@ -152,6 +152,7 @@ body {
   font-family: "Gill Sans", sans-serif;
   background-image: url("../../images/wave.gif");
   border: 0px;
+  border-radius: 15px;
 }
 #index-header{
   padding-left: 40px;
@@ -163,13 +164,15 @@ body {
   background-image: url("../../images/btn-sm.gif");
   border: 0px;
   height: 50px;
-  width: 100%;
+  width: 50%;
+  border-radius: 15px;
 }
 .input-label{
   color: white;
 }
 .sword{
   margin: 0px;
+  font-size: 30px;
 }
 .btn-md{
   display: block;
