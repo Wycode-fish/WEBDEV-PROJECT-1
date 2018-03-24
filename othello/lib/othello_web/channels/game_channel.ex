@@ -26,7 +26,6 @@ defmodule OthelloWeb.GameChannel do
   # by sending replies to requests from the client
   def handle_in("chess", %{"state" => state}, socket) do
     IO.puts("broadcsat!!!!!!!")
-    IO.inspect(state)
     gname = socket.assigns[:name]
     user  = socket.assigns[:user]
     game =  %{ name: gname, host: user, state: state }
@@ -43,6 +42,33 @@ defmodule OthelloWeb.GameChannel do
         {:reply, {:ok, %{}}, socket}
     end
   end
+
+  def handle_in("click", %{"state" => state, "index" => index}, socket) do
+    game = Game.click(state, index)
+    socket = assign(socket, :game, game)
+     {:reply, {:ok, %{ "game" => game}}, socket}
+  end
+
+  def handle_in("aiplay", %{"state" => state, "index" => index}, socket) do
+    game = Game.aiplay(state, index)
+    gname = socket.assigns[:name]
+    user  = socket.assigns[:user]
+    game =  %{ name: gname, host: user, state: state }
+    broadcast socket, "chess", state
+    {:reply, {:ok, %{}}, socket}
+  end
+
+  def handle_in("restart", _params, socket) do
+    game = Game.new()
+    gname = socket.assigns[:name]
+    user  = socket.assigns[:user]
+    game =  %{ name: gname, host: user, state: state }
+    Game.put(gname, game)
+    broadcast socket, "chess", state
+    {:reply, {:ok, %{}}, socket}
+  end
+
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
